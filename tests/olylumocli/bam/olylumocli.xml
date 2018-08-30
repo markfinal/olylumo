@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageDefinition xsi:schemaLocation="http://www.buildamation.com ./Schema/BamPackageDefinitionV1.xsd" name="olylumocli" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildamation.com">
-    <Description>Command line interface</Description>
-    <Dependents>
-      <Package name="C" />
-      <Package name="Clang" version="Xcode9" />
-      <Package name="MakeFileBuilder" />
-      <Package name="NativeBuilder" />
-      <Package name="olylumopath" />
-      <Package name="olylumoray" />
-      <Package name="VisualC" version="15.0" />
-      <Package name="VSSolutionBuilder" />
-      <Package name="XcodeBuilder" />
-    </Dependents>
+  <Description>Command line interface</Description>
+  <Dependents>
+    <Package name="C" />
+    <Package name="Clang" version="Xcode9" />
+    <Package name="MakeFileBuilder" />
+    <Package name="NativeBuilder" />
+    <Package name="olylumopath" />
+    <Package name="olylumoray" />
+    <Package name="VisualC" version="15.0" />
+    <Package name="VSSolutionBuilder" />
+    <Package name="XcodeBuilder" />
+  </Dependents>
   <BamAssemblies>
     <BamAssembly name="Bam.Core" major="2" minor="0" />
   </BamAssemblies>
