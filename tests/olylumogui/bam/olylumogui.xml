@@ -11,6 +11,7 @@
     <Package name="NativeBuilder" />
     <Package name="olylumopath" />
     <Package name="olylumoray" />
+    <Package name="Publisher" />
     <Package name="Qt" version="5.6.2" />
     <Package name="VisualC" version="15.0" />
     <Package name="VSSolutionBuilder" />

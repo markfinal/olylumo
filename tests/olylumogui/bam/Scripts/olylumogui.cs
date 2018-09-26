@@ -1,7 +1,7 @@
 using Bam.Core;
 namespace olylumogui
 {
-    sealed class olylumoGUI :
+    class olylumoGUI :
         C.Cxx.GUIApplication
     {
         protected override void Init(Module parent)
@@ -37,8 +37,7 @@ namespace olylumogui
 
             this.ClosingPatch(settings =>
             {
-                var vcCompiler = source.Settings as VisualCCommon.ICommonCompilerSettings;
-                if (null != vcCompiler)
+                if (source.Settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                 {
                     var linker = settings as C.ICommonLinkerSettings;
                     if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
@@ -51,10 +50,28 @@ namespace olylumogui
                     }
                     else
                     {
-                        throw new Bam.Core.Exception("Unsupported runtime library, {0}", vcCompiler.RuntimeLibrary.ToString());
+                        throw new Bam.Core.Exception(
+                            "Unsupported runtime library, {0}",
+                            vcCompiler.RuntimeLibrary.ToString()
+                        );
                     }
                 }
             });
+        }
+    }
+
+    sealed class olylumoGUIRuntime :
+        Publisher.Collation
+    {
+        protected override void
+        Init(
+            Module parent)
+        {
+            base.Init(parent);
+
+            this.SetDefaultMacrosAndMappings(EPublishingType.WindowedApplication);
+
+            this.Include<olylumoGUI>(C.Cxx.GUIApplication.ExecutableKey);
         }
     }
 }
