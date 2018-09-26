@@ -19,11 +19,11 @@ namespace olylumogui
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
-                this.CompileAndLinkAgainst<Qt.CoreFramework>(source);
+                this.CompileAndLinkAgainst<Qt.WidgetsFramework>(source);
             }
             else
             {
-                this.CompileAndLinkAgainst<Qt.Core>(source);
+                this.CompileAndLinkAgainst<Qt.Widgets>(source);
             }
 
             this.PrivatePatch(settings =>
