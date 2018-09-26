@@ -15,6 +15,17 @@ namespace olylumogui
                 var cxxCompiler = settings as C.ICxxOnlyCompilerSettings;
                 cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
                 cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
+
+                if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
+                {
+                    vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
+                }
+                else if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
+                {
+                    clangCompiler.AllWarnings = true;
+                    clangCompiler.ExtraWarnings = true;
+                    clangCompiler.Pedantic = true;
+                }
             });
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
