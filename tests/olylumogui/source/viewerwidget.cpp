@@ -16,7 +16,6 @@ ViewerWidget::ViewerWidget(
 {
     this->setWindowTitle(inTitle);
     inParent->addSubWindow(this);
-    this->showMaximized();
 
     this->_image_label = new QLabel(this);
 }
@@ -32,6 +31,7 @@ ViewerWidget::set_image(
 {
     this->_image_label->setPixmap(QPixmap::fromImage(*inImage));
     this->_image_label->adjustSize();
+    this->adjustSize();
     this->update();
 }
 
