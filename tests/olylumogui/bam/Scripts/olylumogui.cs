@@ -33,6 +33,10 @@ namespace olylumogui
                     var linker = settings as C.ICommonLinkerSettings;
                     linker.Libraries.Add("shell32.lib"); // for CommandLineToArgvW
                 }
+                else if (settings is ClangCommon.ICommonLinkerSettings clangLinker)
+                {
+                    clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
+                }
             });
 
             this.ClosingPatch(settings =>
