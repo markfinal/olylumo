@@ -1,4 +1,5 @@
 using Bam.Core;
+using QtCommon.MocExtension;
 namespace olylumogui
 {
     class olylumoGUI :
@@ -8,7 +9,13 @@ namespace olylumogui
         {
             base.Init(parent);
 
+            var headers = this.CreateHeaderContainer("$(packagedir)/source/*.h");
             var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.cpp");
+
+            foreach (var header in headers.Children)
+            {
+                source.MocHeader(header);
+            }
 
             this.CompileAndLinkAgainst<olylumoray.RayTrace>(source);
 

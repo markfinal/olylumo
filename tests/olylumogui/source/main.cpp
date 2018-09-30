@@ -1,3 +1,5 @@
+#include "viewerwidget.h"
+
 #include "olylumoray/raycast.h"
 
 #include "QtWidgets/QApplication"
@@ -8,6 +10,23 @@
 
 namespace
 {
+
+olylumogui::ViewerWidget *
+find_viewer_widget(
+    const olylumogui::EViewerType inType)
+{
+    auto main_window = qobject_cast<QMainWindow*>(qApp->activeWindow());
+    auto viewers = main_window->findChildren<olylumogui::ViewerWidget*>();
+    for (const auto &viewer : viewers)
+    {
+        auto type = viewer->type();
+        if (inType == type)
+        {
+            return viewer;
+        }
+    }
+    return nullptr;
+}
 
 void
 do_ray_cast()
@@ -26,13 +45,8 @@ do_ray_cast()
         current_pixel += bytes_per_line / sizeof(olylumoray::RGBA);
     }
 
-    auto main_window = qobject_cast<QMainWindow*>(qApp->activeWindow());
-    auto mdi_area = qobject_cast<QMdiArea*>(main_window->centralWidget());
-    auto widget = new QWidget;
-    mdi_area->addSubWindow(widget);
-    auto label = new QLabel(widget);
-    label->setPixmap(QPixmap::fromImage(*qimage));
-    widget->showMaximized();
+    auto viewer = find_viewer_widget(olylumogui::EViewerType::RayTrace);
+    viewer->set_image(qimage);
 }
 
 } // anonymous namespace
@@ -43,14 +57,21 @@ main(
     char *argv[])
 {
     QApplication app(argc, argv);
+
     QMainWindow window;
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
+
+    /*auto rayTraceViewer = */new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace);
+    /*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
+    mdi->tileSubWindows();
+
     auto toolbar = window.addToolBar("Rendering");
     auto rayTrace = toolbar->addAction("Ray trace");
     QObject::connect(rayTrace, &QAction::triggered, do_ray_cast);
     auto pathTrace = toolbar->addAction("Path trace");
     pathTrace->setEnabled(false);
+
     window.show();
     auto result = app.exec();
     return result;
