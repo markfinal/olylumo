@@ -11,13 +11,17 @@ void
 do_ray_cast()
 {
     auto image = olylumoray::raycast();
+    auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
     auto current_pixel = image->pixels();
     for (auto row = 0u; row < image->height(); ++row)
     {
-        for (auto col = 0u; col < image->width(); ++col)
-        {
-            current_pixel++;
-        }
+        const auto bytes_per_line = qimage->bytesPerLine();
+        memcpy(
+            qimage->scanLine(row),
+            current_pixel,
+            bytes_per_line
+        );
+        current_pixel += bytes_per_line / sizeof(olylumoray::RGBA);
     }
 }
 
