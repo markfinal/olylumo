@@ -1,5 +1,5 @@
 #ifndef OLYLUMORAY_RAYCAST_H
-#define OLYLUMORAT_RAYCAST_H
+#define OLYLUMORAY_RAYCAST_H
 
 #include "olylumoray/api.h"
 
