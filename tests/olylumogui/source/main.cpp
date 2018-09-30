@@ -3,6 +3,8 @@
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
 #include "QtWidgets/QToolBar"
+#include "QtWidgets/QMdiArea"
+#include "QtWidgets/QLabel"
 
 namespace
 {
@@ -23,6 +25,14 @@ do_ray_cast()
         );
         current_pixel += bytes_per_line / sizeof(olylumoray::RGBA);
     }
+
+    auto main_window = qobject_cast<QMainWindow*>(qApp->activeWindow());
+    auto mdi_area = qobject_cast<QMdiArea*>(main_window->centralWidget());
+    auto widget = new QWidget;
+    mdi_area->addSubWindow(widget);
+    auto label = new QLabel(widget);
+    label->setPixmap(QPixmap::fromImage(*qimage));
+    widget->showMaximized();
 }
 
 } // anonymous namespace
@@ -34,6 +44,8 @@ main(
 {
     QApplication app(argc, argv);
     QMainWindow window;
+    auto mdi = new QMdiArea;
+    window.setCentralWidget(mdi);
     auto toolbar = window.addToolBar("Rendering");
     auto rayTrace = toolbar->addAction("Ray trace");
     QObject::connect(rayTrace, &QAction::triggered, do_ray_cast);
