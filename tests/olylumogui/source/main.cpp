@@ -10,7 +10,15 @@ namespace
 void
 do_ray_cast()
 {
-    olylumoray::raycast();
+    auto image = olylumoray::raycast();
+    auto current_pixel = image->pixels();
+    for (auto row = 0u; row < image->height(); ++row)
+    {
+        for (auto col = 0u; col < image->width(); ++col)
+        {
+            current_pixel++;
+        }
+    }
 }
 
 } // anonymous namespace
