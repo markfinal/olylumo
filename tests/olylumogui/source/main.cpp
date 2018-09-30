@@ -1,6 +1,7 @@
 #include "viewerwidget.h"
 
 #include "olylumoray/raycast.h"
+#include "olylumoray/rgba.h"
 
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
