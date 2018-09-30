@@ -14,9 +14,12 @@ namespace olylumogui
 
             source.PrivatePatch(settings =>
             {
-                var cxxCompiler = settings as C.ICxxOnlyCompilerSettings;
-                cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
-                cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
+                if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
+                {
+                    cxxCompiler.EnableRunTimeTypeInfo = false;
+                    cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
+                    cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
+                }
 
                 if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                 {

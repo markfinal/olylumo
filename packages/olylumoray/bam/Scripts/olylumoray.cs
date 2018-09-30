@@ -15,6 +15,13 @@ namespace olylumoray
             var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.cpp");
             source.PrivatePatch(settings =>
             {
+                if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
+                {
+                    cxxCompiler.EnableRunTimeTypeInfo = false;
+                    cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
+                    cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
+                }
+
                 if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                 {
                     vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
