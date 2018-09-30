@@ -10,6 +10,8 @@ namespace olylumogui
 
             var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.cpp");
 
+            this.CompileAndLinkAgainst<olylumoray.RayTrace>(source);
+
             source.PrivatePatch(settings =>
             {
                 var cxxCompiler = settings as C.ICxxOnlyCompilerSettings;

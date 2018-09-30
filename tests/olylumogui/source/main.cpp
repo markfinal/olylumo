@@ -1,3 +1,5 @@
+#include "olylumoray/raycast.h"
+
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
 #include "QtWidgets/QToolBar"
@@ -8,6 +10,7 @@ namespace
 void
 do_ray_cast()
 {
+    olylumoray::raycast();
 }
 
 } // anonymous namespace
