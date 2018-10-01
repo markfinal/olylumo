@@ -35,16 +35,16 @@ do_ray_cast()
 {
     auto image = olylumoray::raycast();
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
-    auto current_pixel = image->pixels();
+    auto src = image->pixels();
     for (auto row = 0u; row < image->height(); ++row)
     {
-        const auto bytes_per_line = qimage->bytesPerLine();
-        memcpy(
-            qimage->scanLine(row),
-            current_pixel,
-            bytes_per_line
-        );
-        current_pixel += bytes_per_line / sizeof(olylumoray::RGBA);
+        auto dst = qimage->scanLine(row);
+        for (auto col = 0u; col < image->width(); ++col)
+        {
+            src->convert_to_bytes(dst);
+            ++src;
+            dst += 4;
+        }
     }
 
     auto viewer = find_viewer_widget(olylumogui::EViewerType::RayTrace);

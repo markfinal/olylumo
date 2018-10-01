@@ -1,6 +1,10 @@
 #ifndef OLYLUMORAY_RGBA_H
 #define OLYLUMORAY_RGBA_H
 
+#include "olylumoray/api.h"
+
+#include <cstdint>
+
 namespace olylumoray
 {
 
@@ -18,6 +22,10 @@ public:
 
     void
     make_opaque();
+
+    OLYLUMORAYAPI void
+    convert_to_bytes(
+        uint8_t *outDst);
 
 private:
     float _red;

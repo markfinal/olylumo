@@ -54,4 +54,14 @@ RGBA::make_opaque()
     this->_alpha = 1;
 }
 
+void
+RGBA::convert_to_bytes(
+    uint8_t *outDst)
+{
+    *(outDst + 0) = static_cast<uint8_t>(this->_red * 255.99f);
+    *(outDst + 1) = static_cast<uint8_t>(this->_green * 255.99f);
+    *(outDst + 2) = static_cast<uint8_t>(this->_blue * 255.99f);
+    *(outDst + 3) = static_cast<uint8_t>(this->_alpha * 255.99f);
+}
+
 } // namespace olylumoray
