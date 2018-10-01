@@ -51,7 +51,7 @@ Image::clear()
         for (auto col = 0u; col < this->_width; ++col)
         {
             const auto r = static_cast<float>(col) / this->_width;
-            current_pixel->set(r, g, 0.2f, 1);
+            *current_pixel = RGBA(r, g, 0.2f, 1);
             current_pixel++;
         }
     }

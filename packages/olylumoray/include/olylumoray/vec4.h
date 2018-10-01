@@ -8,6 +8,18 @@ class Vec4
 {
 public:
     Vec4();
+    Vec4(const float inX, const float inY, const float inZ, const float inW);
+
+    float x() const;
+    float y() const;
+    float z() const;
+    float w() const;
+
+    Vec4 operator+(const Vec4 &inOther) const;
+    Vec4 operator*(const float inScale) const;
+    Vec4 &operator*=(const float inScale);
+
+    Vec4 normalise() const;
 
 private:
     float _x;

@@ -13,6 +13,12 @@ public:
         const Vec4 &inOrigin,
         const Vec4 &inDirection);
 
+    const Vec4 &
+    origin() const;
+
+    const Vec4 &
+    direction() const;
+
 private:
     Vec4 _origin;
     Vec4 _direction;

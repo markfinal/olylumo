@@ -1,29 +1,29 @@
 #ifndef OLYLUMORAY_RGBA_H
 #define OLYLUMORAY_RGBA_H
 
-#include <cstdint>
-
 namespace olylumoray
 {
 
 class RGBA
 {
 public:
+    RGBA();
+    RGBA(const float inRed, const float inGreen, const float inBlue, const float inAlpha);
+
+    RGBA operator+(const RGBA &inOther) const;
+    RGBA operator*(const float inScale) const;
+
     void
     clear();
 
     void
-    set(
-        const float inRed,
-        const float inGreen,
-        const float inBlue,
-        const float inAlpha);
+    make_opaque();
 
 private:
-    uint8_t _red;
-    uint8_t _green;
-    uint8_t _blue;
-    uint8_t _alpha;
+    float _red;
+    float _green;
+    float _blue;
+    float _alpha;
 };
 
 } // namespace olylumoray

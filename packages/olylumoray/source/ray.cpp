@@ -1,5 +1,7 @@
 #include "olylumoray/ray.h"
 
+#include <cassert>
+
 namespace olylumoray
 {
 
@@ -9,6 +11,21 @@ Ray::Ray(
     :
     _origin(inOrigin),
     _direction(inDirection)
-{}
+{
+    assert(1.0f == inOrigin.w());
+    assert(0.0f == inDirection.w());
+}
+
+const Vec4 &
+Ray::origin() const
+{
+    return this->_origin;
+}
+
+const Vec4 &
+Ray::direction() const
+{
+    return this->_direction;
+}
 
 } // namespace olylumoray
