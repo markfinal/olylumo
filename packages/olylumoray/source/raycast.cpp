@@ -30,7 +30,7 @@ raycast()
     // forward -> +z
 
     // define a camera image plane
-    Vec4 camera_image_plane_bottom_left(-2.0f, -1.0f, -1.0f, 0.0f); // used as direction
+    Vec4 camera_image_plane_bottom_left(-2.0f, -1.0f, +1.0f, 0.0f); // used as direction
     Vec4 camera_image_plane_horizonal(4.0f, 0.0f, 0.0f, 0.0f); // direction
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
