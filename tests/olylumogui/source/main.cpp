@@ -65,14 +65,14 @@ main(
     window.setCentralWidget(mdi);
 
     /*auto rayTraceViewer = */new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace);
-    /*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
+    ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();
 
     auto toolbar = window.addToolBar("Rendering");
     auto rayTrace = toolbar->addAction("Ray trace");
     QObject::connect(rayTrace, &QAction::triggered, do_ray_cast);
-    auto pathTrace = toolbar->addAction("Path trace");
-    pathTrace->setEnabled(false);
+    //auto pathTrace = toolbar->addAction("Path trace");
+    //pathTrace->setEnabled(false);
 
     window.show();
     auto result = app.exec();
