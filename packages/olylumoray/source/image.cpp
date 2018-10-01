@@ -17,6 +17,12 @@ Image::Image(
 
 Image::~Image() = default;
 
+RGBA *
+Image::pixels()
+{
+    return this->_pixels.get();
+}
+
 const RGBA *
 Image::pixels() const
 {

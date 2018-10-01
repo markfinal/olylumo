@@ -21,6 +21,9 @@ public:
 
     OLYLUMORAYAPI ~Image(); // Note: only exported as it's currently moved from dynamic library to app
 
+    OLYLUMORAYAPI RGBA *
+    pixels();
+
     OLYLUMORAYAPI const RGBA *
     pixels() const;
 
