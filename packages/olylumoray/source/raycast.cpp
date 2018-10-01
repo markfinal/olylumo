@@ -8,15 +8,17 @@ namespace olylumoray
 std::unique_ptr<Image>
 raycast()
 {
-    std::unique_ptr<Image> image(new Image(640, 480));
+    const auto width = 640u;
+    const auto height = 480u;
+    std::unique_ptr<Image> image(new Image(width, height));
 
     auto current_pixel = image->pixels();
-    for (auto row = 0u; row < image->height(); ++row)
+    for (auto row = 0u; row < height; ++row)
     {
-        const auto g = static_cast<float>(row) / image->height();
-        for (auto col = 0u; col < image->width(); ++col)
+        const auto g = static_cast<float>(row) / height;
+        for (auto col = 0u; col < width; ++col)
         {
-            const auto r = static_cast<float>(col) / image->width();
+            const auto r = static_cast<float>(col) / width;
             current_pixel->set(r, g, 0.4f, 1);
             current_pixel++;
         }
