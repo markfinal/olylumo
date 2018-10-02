@@ -41,7 +41,8 @@ float Vec4::w() const
     return this->_w;
 }
 
-Vec4 Vec4::operator+(
+Vec4
+Vec4::operator+(
     const Vec4 &inOther) const
 {
     Vec4 result(*this);
@@ -49,6 +50,17 @@ Vec4 Vec4::operator+(
     result._y += inOther._y;
     result._z += inOther._z;
     result._w += inOther._w;
+    return result;
+}
+
+Vec4
+Vec4::operator-(const Vec4 &inOther) const
+{
+    Vec4 result(*this);
+    result._x -= inOther._x;
+    result._y -= inOther._y;
+    result._z -= inOther._z;
+    result._w -= inOther._w;
     return result;
 }
 
@@ -69,13 +81,20 @@ Vec4 &Vec4::operator*=(const float inScale)
     return *this;
 }
 
-Vec4 Vec4::normalise() const
+Vec4
+Vec4::normalise() const
 {
     Vec4 result(*this);
     const auto length = sqrtf(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z + this->_w * this->_w);
     const auto reciprocal = 1.0f / length;
     result *= reciprocal;
     return result;
+}
+
+float
+Vec4::dot(const Vec4 &inOther) const
+{
+    return this->_x * inOther._x + this->_y * inOther._y + this->_z * inOther._z + this->_w * inOther._w;
 }
 
 } // namespace olylumoray

@@ -16,10 +16,12 @@ public:
     float w() const;
 
     Vec4 operator+(const Vec4 &inOther) const;
+    Vec4 operator-(const Vec4 &inOther) const;
     Vec4 operator*(const float inScale) const;
     Vec4 &operator*=(const float inScale);
 
     Vec4 normalise() const;
+    float dot(const Vec4 &inOther) const;
 
 private:
     float _x;
