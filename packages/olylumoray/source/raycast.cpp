@@ -5,6 +5,7 @@
 #include "olylumoray/ray.h"
 #include "olylumoray/sphere.h"
 #include "olylumoray/hitrecord.h"
+#include "olylumoray/hitablelist.h"
 
 #include <limits>
 
@@ -15,9 +16,10 @@ RGBA
 colour(
     const Ray &inRay)
 {
-    Sphere sphere({ 0,0,1,1 }, 0.5f);
+    HitableList hit_list;
+    hit_list.append(new Sphere({ 0,0,1,1 }, 0.5f));
     HitRecord record;
-    if (sphere.hit(inRay, 0.0f, std::numeric_limits<float>::max(), record))
+    if (hit_list.hit(inRay, 0.0f, std::numeric_limits<float>::max(), record))
     {
         return RGBA(record._normal + 1) * 0.5f;
     }
