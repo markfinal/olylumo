@@ -4,6 +4,8 @@
 #include "olylumoray/vec4.h"
 #include "olylumoray/ray.h"
 
+#include <cmath>
+
 namespace olylumoray
 {
 
