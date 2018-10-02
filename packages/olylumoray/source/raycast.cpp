@@ -18,6 +18,7 @@ colour(
 {
     HitableList hit_list;
     hit_list.append(new Sphere({ 0,0,1,1 }, 0.5f));
+    hit_list.append(new Sphere({ 0,-100.5f,1,1 }, 100));
     HitRecord record;
     if (hit_list.hit(inRay, 0.0f, std::numeric_limits<float>::max(), record))
     {
