@@ -1,4 +1,5 @@
 #include "olylumoray/rgba.h"
+#include "olylumoray/vec4.h"
 
 namespace olylumoray
 {
@@ -17,6 +18,14 @@ RGBA::RGBA(const float inRed, const float inGreen, const float inBlue, const flo
     _green(inGreen),
     _blue(inBlue),
     _alpha(inAlpha)
+{}
+
+RGBA::RGBA(const Vec4 &inOther)
+    :
+    _red(inOther.x()),
+    _green(inOther.y()),
+    _blue(inOther.z()),
+    _alpha(inOther.w())
 {}
 
 RGBA RGBA::operator+(const RGBA &inOther) const

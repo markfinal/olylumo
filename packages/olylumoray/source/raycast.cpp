@@ -16,17 +16,20 @@ public:
         const float inC);
 
     float
-    determinant() const;
+    discriminant() const;
+
+    float
+    solution() const;
 
 private:
     void
-    calculate_determinant();
+    calculate_discriminant();
 
 private:
     float _a;
     float _b;
     float _c;
-    float _determinant;
+    float _discriminant;
 };
 
 Quadratic::Quadratic(
@@ -38,23 +41,30 @@ Quadratic::Quadratic(
     _b(inB),
     _c(inC)
 {
-    this->calculate_determinant();
+    this->calculate_discriminant();
 }
 
 float
-Quadratic::determinant() const
+Quadratic::solution() const
 {
-    return this->_determinant;
+    // (-b - sqrt(disc))/2a
+    return (-this->_b - sqrtf(this->_discriminant)) / (2 * this->_a);
+}
+
+float
+Quadratic::discriminant() const
+{
+    return this->_discriminant;
 }
 
 void
-Quadratic::calculate_determinant()
+Quadratic::calculate_discriminant()
 {
     // b^2 - 4 * a * c
-    this->_determinant = this->_b * this->_b - 4 * this->_a * this->_c;
+    this->_discriminant = this->_b * this->_b - 4 * this->_a * this->_c;
 }
 
-bool
+float
 ray_intersect_sphere(
     const Vec4 &inSphereOrigin,
     const float inSphereRadius,
@@ -66,20 +76,29 @@ ray_intersect_sphere(
         2 * inRay.direction().dot(distance),
         distance.dot(distance) - inSphereRadius * inSphereRadius
     );
-    return q.determinant() > 0;
+    if (q.discriminant() > 0)
+    {
+        return q.solution();
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 RGBA
 colour(
     const Ray &inRay)
 {
-    if (ray_intersect_sphere({0,0,1,1}, 0.5f, inRay))
+    const auto t = ray_intersect_sphere({ 0,0,1,1 }, 0.5f, inRay);
+    if (t >= 0)
     {
-        return RGBA(1, 0, 0, 1);
+        const auto N = inRay.pos(t);
+        return RGBA(N + 1) * 0.5f;
     }
     const auto unit = inRay.direction().normalise();
-    const auto t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
-    const auto lerp = RGBA(1, 1, 1, 1) * (1.0f - t) + RGBA(0.5f, 0.7f, 1.0f, 1.0f) * t;
+    const auto background_t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
+    const auto lerp = RGBA(1, 1, 1, 1) * (1.0f - background_t) + RGBA(0.5f, 0.7f, 1.0f, 1.0f) * background_t;
     return lerp;
 }
 

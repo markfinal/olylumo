@@ -16,6 +16,7 @@ public:
     float w() const;
 
     Vec4 operator+(const Vec4 &inOther) const;
+    Vec4 operator+(const float inOther) const;
     Vec4 operator-(const Vec4 &inOther) const;
     Vec4 operator*(const float inScale) const;
     Vec4 &operator*=(const float inScale);

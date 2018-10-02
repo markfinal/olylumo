@@ -54,6 +54,17 @@ Vec4::operator+(
 }
 
 Vec4
+Vec4::operator+(const float inOther) const
+{
+    Vec4 result(*this);
+    result._x += inOther;
+    result._y += inOther;
+    result._z += inOther;
+    result._w += inOther;
+    return result;
+}
+
+Vec4
 Vec4::operator-(const Vec4 &inOther) const
 {
     Vec4 result(*this);

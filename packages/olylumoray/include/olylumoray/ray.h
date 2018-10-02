@@ -19,6 +19,10 @@ public:
     const Vec4 &
     direction() const;
 
+    Vec4
+    pos(
+        const float inT) const;
+
 private:
     Vec4 _origin;
     Vec4 _direction;

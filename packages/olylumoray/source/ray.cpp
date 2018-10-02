@@ -28,4 +28,11 @@ Ray::direction() const
     return this->_direction;
 }
 
+Vec4
+Ray::pos(
+    const float inT) const
+{
+    return this->_origin + this->_direction * inT;
+}
+
 } // namespace olylumoray

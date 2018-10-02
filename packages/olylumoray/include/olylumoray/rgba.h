@@ -8,11 +8,14 @@
 namespace olylumoray
 {
 
+class Vec4;
+
 class RGBA
 {
 public:
     RGBA();
     RGBA(const float inRed, const float inGreen, const float inBlue, const float inAlpha);
+    RGBA(const Vec4 &inOther);
 
     RGBA operator+(const RGBA &inOther) const;
     RGBA operator*(const float inScale) const;
