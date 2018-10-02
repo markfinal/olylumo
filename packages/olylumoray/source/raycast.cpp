@@ -4,7 +4,7 @@
 #include "olylumoray/vec4.h"
 #include "olylumoray/ray.h"
 #include "olylumoray/sphere.h"
-#include "olylumoray/hit_record.h"
+#include "olylumoray/hitrecord.h"
 
 #include <limits>
 

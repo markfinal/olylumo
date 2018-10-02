@@ -1,5 +1,5 @@
-#ifndef OLYLUMORAY_HIT_RECORD_H
-#define OLYLUMORAY_HIT_RECORD_H
+#ifndef OLYLUMORAY_HITRECORD_H
+#define OLYLUMORAY_HITRECORD_H
 
 #include "olylumoray/vec4.h"
 
@@ -15,4 +15,4 @@ struct HitRecord
 
 } // namespace olylumoray
 
-#endif // OLYLUMORAY_HIT_RECORD_H
+#endif // OLYLUMORAY_HITRECORD_H

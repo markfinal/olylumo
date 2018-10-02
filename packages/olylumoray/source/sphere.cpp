@@ -1,7 +1,7 @@
 #include "olylumoray/sphere.h"
 #include "olylumoray/quadratic.h"
 #include "olylumoray/ray.h"
-#include "olylumoray/hit_record.h"
+#include "olylumoray/hitrecord.h"
 
 namespace olylumoray
 {
