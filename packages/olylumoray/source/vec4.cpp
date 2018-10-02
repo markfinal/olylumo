@@ -1,6 +1,7 @@
 #include "olylumoray/vec4.h"
 
 #include <cmath>
+#include <cassert>
 
 namespace olylumoray
 {
@@ -90,6 +91,13 @@ Vec4 &Vec4::operator*=(const float inScale)
     this->_z *= inScale;
     this->_w *= inScale;
     return *this;
+}
+
+Vec4 Vec4::operator/(const float inScale) const
+{
+    assert(inScale != 0);
+    const auto reciprocal = 1.0f / inScale;
+    return *this * reciprocal;
 }
 
 Vec4
