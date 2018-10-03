@@ -18,7 +18,10 @@ public:
     RGBA(const Vec4 &inOther);
 
     RGBA operator+(const RGBA &inOther) const;
+    RGBA &operator+=(const RGBA &inOther);
     RGBA operator*(const float inScale) const;
+    RGBA &operator*=(const float inScale);
+    RGBA operator/(const float inScale) const;
 
     void
     clear();

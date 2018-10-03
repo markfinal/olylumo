@@ -8,12 +8,13 @@
 #include "olylumoray/hitablelist.h"
 
 #include <limits>
+#include <random>
 
 namespace olylumoray
 {
 
 RGBA
-colour(
+calculate_colour(
     const Ray &inRay,
     const float inMinT) // near plane
 {
@@ -36,6 +37,7 @@ raycast()
 {
     const auto width = 1280u;
     const auto height = 720u;
+    const auto num_samples = 10u;
     std::unique_ptr<Image> image(new Image(width, height));
 
     // use left-handed coordinate system:
@@ -49,20 +51,29 @@ raycast()
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dis(0, 1);
     auto current_pixel = image->pixels();
     for (auto row = 0u; row < height; ++row)
     {
-        // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
-        const auto v = static_cast<float>(height - row) / height;
         for (auto col = 0u; col < width; ++col)
         {
-            const auto u = static_cast<float>(col) / width;
+            RGBA colour;
+            for (auto sample = 0u; sample < num_samples; ++sample)
+            {
+                const auto u = static_cast<float>(col + dis(gen)) / width;
+                // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
+                const auto v = static_cast<float>(height - row + dis(gen)) / height;
 
-            Ray ray(
-                camera_origin,
-                (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
-            );
-            *current_pixel = colour(ray, camera_image_plane_bottom_left.z());
+                Ray ray(
+                    camera_origin,
+                    (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
+                );
+                colour += calculate_colour(ray, camera_image_plane_bottom_left.z());
+            }
+
+            *current_pixel = colour / num_samples;
             current_pixel->make_opaque();
             current_pixel++;
         }

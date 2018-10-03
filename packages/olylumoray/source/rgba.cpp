@@ -1,6 +1,8 @@
 #include "olylumoray/rgba.h"
 #include "olylumoray/vec4.h"
 
+#include <cassert>
+
 namespace olylumoray
 {
 
@@ -31,20 +33,41 @@ RGBA::RGBA(const Vec4 &inOther)
 RGBA RGBA::operator+(const RGBA &inOther) const
 {
     RGBA result(*this);
-    result._red += inOther._red;
-    result._green += inOther._green;
-    result._blue += inOther._blue;
-    result._alpha += inOther._alpha;
+    result += inOther;
     return result;
+}
+
+RGBA &RGBA::operator+=(const RGBA &inOther)
+{
+    this->_red += inOther._red;
+    this->_green += inOther._green;
+    this->_blue += inOther._blue;
+    this->_alpha += inOther._alpha;
+    return *this;
 }
 
 RGBA RGBA::operator*(const float inScale) const
 {
     RGBA result(*this);
-    result._red *= inScale;
-    result._green *= inScale;
-    result._blue *= inScale;
-    result._alpha *= inScale;
+    result *= inScale;
+    return result;
+}
+
+RGBA &RGBA::operator*=(const float inScale)
+{
+    this->_red *= inScale;
+    this->_green *= inScale;
+    this->_blue *= inScale;
+    this->_alpha *= inScale;
+    return *this;
+}
+
+RGBA RGBA::operator/(const float inScale) const
+{
+    assert(0 != inScale);
+    const auto reciprocal = 1.0f / inScale;
+    RGBA result(*this);
+    result *= reciprocal;
     return result;
 }
 
