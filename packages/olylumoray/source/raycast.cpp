@@ -34,8 +34,8 @@ colour(
 std::unique_ptr<Image>
 raycast()
 {
-    const auto width = 640u;
-    const auto height = 480u;
+    const auto width = 1280u;
+    const auto height = 720u;
     std::unique_ptr<Image> image(new Image(width, height));
 
     // use left-handed coordinate system:
