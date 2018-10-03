@@ -14,13 +14,14 @@ namespace olylumoray
 
 RGBA
 colour(
-    const Ray &inRay)
+    const Ray &inRay,
+    const float inMinT) // near plane
 {
     HitableList hit_list;
-    hit_list.append(new Sphere({ 0,0,1,1 }, 0.5f));
-    hit_list.append(new Sphere({ 0,-100.5f,1,1 }, 100));
+    hit_list.append(new Sphere({ 0,0,2,1 }, 0.5f));
+    hit_list.append(new Sphere({ 0,-100.5f,2,1 }, 100));
     HitRecord record;
-    if (hit_list.hit(inRay, 0.0f, std::numeric_limits<float>::max(), record))
+    if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
         return RGBA(record._normal + 1) * 0.5f;
     }
@@ -61,7 +62,7 @@ raycast()
                 camera_origin,
                 camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v
             );
-            *current_pixel = colour(ray);
+            *current_pixel = colour(ray, camera_image_plane_bottom_left.z());
             current_pixel->make_opaque();
             current_pixel++;
         }
