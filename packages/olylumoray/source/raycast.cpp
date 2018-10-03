@@ -60,7 +60,7 @@ raycast()
 
             Ray ray(
                 camera_origin,
-                camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v
+                (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
             );
             *current_pixel = colour(ray, camera_image_plane_bottom_left.z());
             current_pixel->make_opaque();
