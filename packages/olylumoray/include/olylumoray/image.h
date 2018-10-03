@@ -11,6 +11,7 @@ namespace olylumoray
 
 class RGBA;
 
+// First RGBA is at the origin (0,0) which is top-left of the image
 class Image
 {
 public:

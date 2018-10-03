@@ -51,7 +51,8 @@ raycast()
     auto current_pixel = image->pixels();
     for (auto row = 0u; row < height; ++row)
     {
-        const auto v = static_cast<float>(row) / height;
+        // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
+        const auto v = static_cast<float>(height - row) / height;
         for (auto col = 0u; col < width; ++col)
         {
             const auto u = static_cast<float>(col) / width;
