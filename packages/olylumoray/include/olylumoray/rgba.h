@@ -33,6 +33,9 @@ public:
     convert_to_bytes(
         uint8_t *outDst);
 
+    OLYLUMORAYAPI RGBA
+    gamma_correct() const;
+
 private:
     float _red;
     float _green;

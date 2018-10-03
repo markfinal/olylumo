@@ -13,6 +13,21 @@
 namespace olylumoray
 {
 
+Vec4
+random_in_unit_sphere()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dis(0, 1);
+    Vec4 p;
+    do
+    {
+        p = (Vec4(dis(gen), dis(gen), dis(gen), 1) - Vec4(1, 1, 1, 1)) * 2.0f;
+    }
+    while (p.squared_length() >= 1.0f);
+    return p;
+}
+
 RGBA
 calculate_colour(
     const Ray &inRay,
@@ -24,7 +39,8 @@ calculate_colour(
     HitRecord record;
     if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
-        return RGBA(record._normal + 1) * 0.5f;
+        const auto target = record._pos + record._normal + random_in_unit_sphere();
+        return calculate_colour(Ray(record._pos, target - record._pos), inMinT);
     }
     const auto unit = inRay.direction().normalise();
     const auto background_t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
@@ -37,7 +53,7 @@ raycast()
 {
     const auto width = 1280u;
     const auto height = 720u;
-    const auto num_samples = 10u;
+    const auto num_samples = 1u;
     std::unique_ptr<Image> image(new Image(width, height));
 
     // use left-handed coordinate system:
@@ -70,10 +86,13 @@ raycast()
                     camera_origin,
                     (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
                 );
-                colour += calculate_colour(ray, camera_image_plane_bottom_left.z());
+                const auto minT = 0.0f;
+                //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
+                colour += calculate_colour(ray, minT);
             }
 
             *current_pixel = colour / num_samples;
+            *current_pixel = current_pixel->gamma_correct();
             current_pixel->make_opaque();
             current_pixel++;
         }

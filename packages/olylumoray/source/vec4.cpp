@@ -104,7 +104,7 @@ Vec4
 Vec4::normalise() const
 {
     Vec4 result(*this);
-    const auto length = sqrtf(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z + this->_w * this->_w);
+    const auto length = sqrtf(this->squared_length());
     const auto reciprocal = 1.0f / length;
     result *= reciprocal;
     return result;
@@ -114,6 +114,12 @@ float
 Vec4::dot(const Vec4 &inOther) const
 {
     return this->_x * inOther._x + this->_y * inOther._y + this->_z * inOther._z + this->_w * inOther._w;
+}
+
+float
+Vec4::squared_length() const
+{
+    return this->dot(*this);
 }
 
 } // namespace olylumoray

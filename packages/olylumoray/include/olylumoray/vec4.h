@@ -24,6 +24,7 @@ public:
 
     Vec4 normalise() const;
     float dot(const Vec4 &inOther) const;
+    float squared_length() const;
 
 private:
     float _x;

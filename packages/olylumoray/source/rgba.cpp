@@ -2,6 +2,7 @@
 #include "olylumoray/vec4.h"
 
 #include <cassert>
+#include <cmath>
 
 namespace olylumoray
 {
@@ -94,6 +95,18 @@ RGBA::convert_to_bytes(
     *(outDst + 1) = static_cast<uint8_t>(this->_green * 255.99f);
     *(outDst + 2) = static_cast<uint8_t>(this->_blue * 255.99f);
     *(outDst + 3) = static_cast<uint8_t>(this->_alpha * 255.99f);
+}
+
+RGBA
+RGBA::gamma_correct() const
+{
+    const RGBA result(
+        sqrtf(this->_red),
+        sqrtf(this->_green),
+        sqrtf(this->_blue),
+        sqrtf(this->_alpha)
+    );
+    return result;
 }
 
 } // namespace olylumoray
