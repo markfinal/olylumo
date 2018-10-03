@@ -10,6 +10,8 @@
 #include <limits>
 #include <random>
 
+//#define DIFFUSE
+
 namespace olylumoray
 {
 
@@ -39,8 +41,12 @@ calculate_colour(
     HitRecord record;
     if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
+#ifdef DIFFUSE
         const auto target = record._pos + record._normal + random_in_unit_sphere();
         return calculate_colour(Ray(record._pos, target - record._pos), inMinT);
+#else
+        return RGBA(record._normal + 1) * 0.5f;
+#endif
     }
     const auto unit = inRay.direction().normalise();
     const auto background_t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
