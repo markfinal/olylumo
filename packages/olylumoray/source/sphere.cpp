@@ -34,7 +34,7 @@ Sphere::hit(
         {
             outRecord._t = t;
             outRecord._pos = inRay.pos(t);
-            outRecord._normal = (outRecord._pos - this->_origin) / this->_radius;
+            outRecord._normal = ((outRecord._pos - this->_origin) / this->_radius).normalise();
             return true;
         }
         t = q.solution2();
@@ -42,7 +42,7 @@ Sphere::hit(
         {
             outRecord._t = t;
             outRecord._pos = inRay.pos(t);
-            outRecord._normal = (outRecord._pos - this->_origin) / this->_radius;
+            outRecord._normal = ((outRecord._pos - this->_origin) / this->_radius).normalise();
             return true;
         }
     }
