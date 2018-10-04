@@ -37,8 +37,8 @@ calculate_colour(
     const float inMinT) // near plane
 {
     HitableList hit_list;
-    hit_list.append(new Sphere({ 0,0,2,1 }, 0.5f));
-    hit_list.append(new Sphere({ 0,-100.5f,2,1 }, 100));
+    hit_list.append(new Sphere({ 0,0,-3,1 }, 0.5f));
+    hit_list.append(new Sphere({ 0,-100.5f,-3,1 }, 100));
     HitRecord record;
     if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
@@ -63,13 +63,14 @@ raycast()
     const auto num_samples = 1u;
     std::unique_ptr<Image> image(new Image(width, height));
 
-    // use left-handed coordinate system:
+    // use right-handed coordinate system:
     // right   -> +x
     // up      -> +y
-    // forward -> +z
+    // forward -> -z
+    // this way, normals facing the camera plane will have a positive Z
 
     // define a camera image plane for the pin-hole camera
-    Vec4 camera_image_plane_bottom_left(-1.33f, -1.0f, +1.0f, 0.0f); // used as direction
+    Vec4 camera_image_plane_bottom_left(-1.33f, -1.0f, -1.0f, 0.0f); // used as direction
     Vec4 camera_image_plane_horizonal(2.66f, 0.0f, 0.0f, 0.0f); // direction
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
