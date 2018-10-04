@@ -3,6 +3,8 @@
 #include "olylumoray/ray.h"
 #include "olylumoray/hitrecord.h"
 
+#include <algorithm>
+
 namespace olylumoray
 {
 
@@ -29,7 +31,9 @@ Sphere::hit(
     );
     if (q.discriminant() > 0)
     {
-        auto t = q.solution1();
+        auto t1 = q.solution1();
+        auto t2 = q.solution2();
+        const auto t = std::min(t1, t2);
         if (t > inMinT && t < inMaxT)
         {
             outRecord._t = t;
@@ -37,7 +41,10 @@ Sphere::hit(
             outRecord._normal = ((outRecord._pos - this->_origin) / this->_radius).normalise();
             return true;
         }
-        t = q.solution2();
+    }
+    else if (0 == q.discriminant()) // floating point error?
+    {
+        const auto t = q.unique_solution();
         if (t > inMinT && t < inMaxT)
         {
             outRecord._t = t;

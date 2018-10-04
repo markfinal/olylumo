@@ -21,6 +21,9 @@ public:
     float
     solution2() const;
 
+    float
+    unique_solution() const;
+
 private:
     void
     calculate_discriminant();

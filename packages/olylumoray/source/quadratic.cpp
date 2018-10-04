@@ -1,6 +1,7 @@
 #include "olylumoray/quadratic.h"
 
 #include <cmath>
+#include <cassert>
 
 namespace olylumoray
 {
@@ -29,6 +30,13 @@ Quadratic::solution2() const
 {
     // (-b + sqrt(disc))/2a
     return (-this->_b + sqrtf(this->_discriminant)) / (2 * this->_a);
+}
+
+float
+Quadratic::unique_solution() const
+{
+    assert(0 == this->_discriminant);
+    return -this->_b / (2 * this->_a);
 }
 
 float
