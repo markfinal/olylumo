@@ -14,7 +14,8 @@
 
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_real_distribution<float> dis(0, 1);
+std::uniform_real_distribution<float> unit_dist(0, 1);
+std::uniform_real_distribution<float> cube_dist(-1, 1);
 
 namespace olylumoray
 {
@@ -25,7 +26,7 @@ random_in_unit_sphere()
     Vec4 p;
     do
     {
-        p = (Vec4(dis(gen), dis(gen), dis(gen), 1) - Vec4(1, 1, 1, 1)) * 2.0f;
+        p = Vec4(cube_dist(gen), cube_dist(gen), cube_dist(gen), 0);
     }
     while (p.squared_length() >= 1.0f);
     return p;
@@ -83,9 +84,9 @@ raycast()
             RGBA colour;
             for (auto sample = 0u; sample < num_samples; ++sample)
             {
-                const auto u = static_cast<float>(col + dis(gen)) / width;
+                const auto u = static_cast<float>(col + unit_dist(gen)) / width;
                 // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
-                const auto v = static_cast<float>(height - row + dis(gen)) / height;
+                const auto v = static_cast<float>(height - row + unit_dist(gen)) / height;
 
                 Ray ray(
                     camera_origin,
