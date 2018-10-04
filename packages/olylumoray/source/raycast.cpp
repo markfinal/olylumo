@@ -57,8 +57,8 @@ calculate_colour(
 std::unique_ptr<Image>
 raycast()
 {
-    const auto width = 1280u;
-    const auto height = 720u;
+    const auto width = 320u;
+    const auto height = 240u;
     const auto num_samples = 1u;
     std::unique_ptr<Image> image(new Image(width, height));
 
