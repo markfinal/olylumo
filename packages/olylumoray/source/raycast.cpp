@@ -12,15 +12,16 @@
 
 //#define DIFFUSE
 
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<float> dis(0, 1);
+
 namespace olylumoray
 {
 
 Vec4
 random_in_unit_sphere()
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(0, 1);
     Vec4 p;
     do
     {
@@ -67,15 +68,12 @@ raycast()
     // up      -> +y
     // forward -> +z
 
-    // define a camera image plane
+    // define a camera image plane for the pin-hole camera
     Vec4 camera_image_plane_bottom_left(-1.33f, -1.0f, +1.0f, 0.0f); // used as direction
     Vec4 camera_image_plane_horizonal(2.66f, 0.0f, 0.0f, 0.0f); // direction
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(0, 1);
     auto current_pixel = image->pixels();
     for (auto row = 0u; row < height; ++row)
     {
