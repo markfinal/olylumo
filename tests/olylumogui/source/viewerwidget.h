@@ -33,6 +33,15 @@ public:
     set_image(
         QImage *inImage);
 
+protected:
+    void
+    paintEvent(
+        QPaintEvent *e) override;
+
+private:
+    void
+    do_ray_cast();
+
 private:
     EViewerType  _type;
     QLabel      *_image_label;

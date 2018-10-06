@@ -1,5 +1,9 @@
 #include "viewerwidget.h"
 
+#include "olylumoray/raycast.h"
+#include "olylumoray/image.h"
+#include "olylumoray/rgba.h"
+
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
 #include "QtWidgets/QLayout"
@@ -50,6 +54,34 @@ ViewerWidget::set_image(
     this->_image_label->adjustSize();
     this->adjustSize();
     this->update();
+}
+
+void
+ViewerWidget::paintEvent(
+    QPaintEvent *e)
+{
+    this->do_ray_cast();
+    QWidget::paintEvent(e);
+}
+
+void
+ViewerWidget::do_ray_cast()
+{
+    auto image = olylumoray::raycast();
+    auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
+    auto src = image->pixels();
+    for (auto row = 0u; row < image->height(); ++row)
+    {
+        auto dst = qimage->scanLine(row);
+        for (auto col = 0u; col < image->width(); ++col)
+        {
+            src->convert_to_bytes(dst);
+            ++src;
+            dst += 4;
+        }
+    }
+
+    this->set_image(qimage);
 }
 
 } // namespace olylumogui

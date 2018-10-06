@@ -1,57 +1,10 @@
 #include "viewerwidget.h"
 
-#include "olylumoray/raycast.h"
-#include "olylumoray/image.h"
-#include "olylumoray/rgba.h"
-
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
 #include "QtWidgets/QToolBar"
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
-
-namespace
-{
-
-olylumogui::ViewerWidget *
-find_viewer_widget(
-    const olylumogui::EViewerType inType)
-{
-    auto main_window = qobject_cast<QMainWindow*>(qApp->activeWindow());
-    auto viewers = main_window->findChildren<olylumogui::ViewerWidget*>();
-    for (const auto &viewer : viewers)
-    {
-        auto type = viewer->type();
-        if (inType == type)
-        {
-            return viewer;
-        }
-    }
-    return nullptr;
-}
-
-void
-do_ray_cast()
-{
-    auto image = olylumoray::raycast();
-    auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
-    auto src = image->pixels();
-    for (auto row = 0u; row < image->height(); ++row)
-    {
-        auto dst = qimage->scanLine(row);
-        for (auto col = 0u; col < image->width(); ++col)
-        {
-            src->convert_to_bytes(dst);
-            ++src;
-            dst += 4;
-        }
-    }
-
-    auto viewer = find_viewer_widget(olylumogui::EViewerType::RayTrace);
-    viewer->set_image(qimage);
-}
-
-} // anonymous namespace
 
 int
 main(
@@ -68,12 +21,6 @@ main(
     mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();
-
-    auto toolbar = window.addToolBar("Rendering");
-    auto rayTrace = toolbar->addAction("Ray trace");
-    QObject::connect(rayTrace, &QAction::triggered, do_ray_cast);
-    //auto pathTrace = toolbar->addAction("Path trace");
-    //pathTrace->setEnabled(false);
 
     window.show();
     auto result = app.exec();
