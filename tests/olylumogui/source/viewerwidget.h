@@ -5,6 +5,7 @@
 
 class QMdiArea;
 class QLabel;
+class QComboBox;
 
 namespace olylumogui
 {
@@ -38,6 +39,11 @@ protected:
     paintEvent(
         QPaintEvent *e) override;
 
+protected:
+    void
+    on_frame_size_change(
+        int inNewIndex);
+
 private:
     void
     do_ray_cast();
@@ -45,6 +51,8 @@ private:
 private:
     EViewerType  _type;
     QLabel      *_image_label;
+    QComboBox   *_frame_size;
+    int          _current_frame_size_index = 0;
 };
 
 } // namespace olylumogui

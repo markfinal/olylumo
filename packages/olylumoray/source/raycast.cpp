@@ -58,12 +58,12 @@ calculate_colour(
 }
 
 std::unique_ptr<Image>
-raycast()
+raycast(
+    const uint32_t inWidth,
+    const uint32_t inHeight)
 {
-    const auto width = 320u;
-    const auto height = 240u;
     const auto num_samples = 1u;
-    std::unique_ptr<Image> image(new Image(width, height));
+    std::unique_ptr<Image> image(new Image(inWidth, inHeight));
 
     // use right-handed coordinate system:
     // right   -> +x
@@ -78,16 +78,16 @@ raycast()
     Vec4 camera_origin(0, 0, 0, 1); // position
 
     auto current_pixel = image->pixels();
-    for (auto row = 0u; row < height; ++row)
+    for (auto row = 0u; row < inHeight; ++row)
     {
-        for (auto col = 0u; col < width; ++col)
+        for (auto col = 0u; col < inWidth; ++col)
         {
             RGBA colour;
             for (auto sample = 0u; sample < num_samples; ++sample)
             {
-                const auto u = static_cast<float>(col + unit_dist(gen)) / width;
+                const auto u = static_cast<float>(col + unit_dist(gen)) / inWidth;
                 // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
-                const auto v = static_cast<float>(height - row + unit_dist(gen)) / height;
+                const auto v = static_cast<float>(inHeight - row + unit_dist(gen)) / inHeight;
 
                 Ray ray(
                     camera_origin,

@@ -26,13 +26,18 @@ ViewerWidget::ViewerWidget(
     auto layout = new QVBoxLayout;
     this->setLayout(layout);
 
-    auto frame_size = new QComboBox;
-    frame_size->addItem("320x240", QVariant::fromValue(QSize(320, 240)));
-    frame_size->addItem("640x480", QVariant::fromValue(QSize(640, 480)));
-    //connect(frame_size, &QComboBox::currentIndexChanged, this, )
+    this->_frame_size = new QComboBox;
+    this->_frame_size->addItem("320x240", QVariant::fromValue(QSize(320, 240)));
+    this->_frame_size->addItem("640x480", QVariant::fromValue(QSize(640, 480)));
+    connect(
+        this->_frame_size,
+        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this,
+        &ViewerWidget::on_frame_size_change
+    );
 
     auto toolbar = new QToolBar;
-    toolbar->addWidget(frame_size);
+    toolbar->addWidget(this->_frame_size);
     layout->addWidget(toolbar);
 
     this->_image_label = new QLabel(this);
@@ -65,9 +70,17 @@ ViewerWidget::paintEvent(
 }
 
 void
+ViewerWidget::on_frame_size_change(
+    int inNewIndex)
+{
+    this->_current_frame_size_index = inNewIndex;
+}
+
+void
 ViewerWidget::do_ray_cast()
 {
-    auto image = olylumoray::raycast();
+    const auto frame_size = this->_frame_size->itemData(this->_current_frame_size_index).toSize();
+    auto image = olylumoray::raycast(frame_size.width(), frame_size.height());
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
     auto src = image->pixels();
     for (auto row = 0u; row < image->height(); ++row)

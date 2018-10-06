@@ -4,6 +4,7 @@
 #include "olylumoray/api.h"
 
 #include <memory>
+#include <cstdint>
 
 namespace olylumoray
 {
@@ -11,7 +12,9 @@ namespace olylumoray
 class Image;
 
 extern OLYLUMORAYAPI std::unique_ptr<Image>
-raycast();
+raycast(
+    const uint32_t inWidth,
+    const uint32_t inHeight);
 
 } // namespace olylumoray
 
