@@ -159,8 +159,6 @@ ViewerWidget::setup_ui()
 
     this->_max_rays_cast = new QComboBox;
     this->_max_rays_cast->addItem("Infinite", QVariant::fromValue(std::numeric_limits<uint32_t>::max()));
-    this->_max_rays_cast->addItem("1024", QVariant::fromValue(1024));
-    this->_max_rays_cast->addItem("256", QVariant::fromValue(256u));
     this->_max_rays_cast->addItem("16", QVariant::fromValue(16u));
     this->_max_rays_cast->addItem("4", QVariant::fromValue(4u));
     this->_max_rays_cast->addItem("2", QVariant::fromValue(2u));
