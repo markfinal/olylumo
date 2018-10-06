@@ -93,7 +93,7 @@ raycast()
                     camera_origin,
                     (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
                 );
-                const auto minT = 0.0f;
+                const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
                 colour += calculate_colour(ray, minT);
             }
