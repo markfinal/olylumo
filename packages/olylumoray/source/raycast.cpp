@@ -74,9 +74,9 @@ std::unique_ptr<Image>
 raycast(
     const uint32_t inWidth,
     const uint32_t inHeight,
+    const uint32_t inSampleCount,
     const EMode inMode)
 {
-    const auto num_samples = 1u;
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
 
     // use right-handed coordinate system:
@@ -99,7 +99,7 @@ raycast(
         for (auto col = 0u; col < inWidth; ++col)
         {
             RGBA colour;
-            for (auto sample = 0u; sample < num_samples; ++sample)
+            for (auto sample = 0u; sample < inSampleCount; ++sample)
             {
                 const auto u = static_cast<float>(col + unit_dist(gen)) / inWidth;
                 // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
@@ -114,7 +114,7 @@ raycast(
                 colour += calculate_colour(ray, minT, inMode);
             }
 
-            *current_pixel = colour / num_samples;
+            *current_pixel = colour / static_cast<float>(inSampleCount);
             *current_pixel = current_pixel->gamma_correct();
             current_pixel->make_opaque();
             current_pixel++;

@@ -21,6 +21,7 @@ extern OLYLUMORAYAPI std::unique_ptr<Image>
 raycast(
     const uint32_t inWidth,
     const uint32_t inHeight,
+    const uint32_t inSampleCount,
     const EMode inMode);
 
 } // namespace olylumoray

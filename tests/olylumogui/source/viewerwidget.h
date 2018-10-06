@@ -6,6 +6,7 @@
 class QMdiArea;
 class QLabel;
 class QComboBox;
+class QSpinBox;
 
 namespace olylumoray
 {
@@ -37,12 +38,17 @@ public:
 
 protected:
     void
-    on_frame_size_change(
+    on_frame_size_changed(
         int inNewIndex);
 
     void
-    on_render_mode_change(
+    on_render_mode_changed(
         int inNewIndex);
+
+    void
+    on_sample_count_changed(
+        int inNewValue
+    );
 
 private:
     void
@@ -56,6 +62,7 @@ private:
     QLabel           *_image_label;
     QComboBox        *_frame_size;
     QComboBox        *_render_mode;
+    QSpinBox         *_sample_count;
     int               _current_frame_size_index = 0;
     olylumoray::EMode _current_render_mode;
 };
