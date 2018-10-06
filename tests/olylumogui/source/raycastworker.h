@@ -23,6 +23,7 @@ public:
     RayCastWorker(
         const QSize inSize,
         const int inSampleCount,
+        const int inMaxRaysCast,
         const olylumoray::EMode inRenderMode
     );
 
@@ -42,6 +43,7 @@ protected:
 private:
     QSize             _size;
     int               _sample_count;
+    int               _max_rays_cast;
     olylumoray::EMode _render_mode;
     QImage           *_result = nullptr;
 };

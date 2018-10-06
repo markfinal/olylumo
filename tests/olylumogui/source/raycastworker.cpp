@@ -12,11 +12,13 @@ namespace olylumogui
 RayCastWorker::RayCastWorker(
     const QSize inSize,
     const int inSampleCount,
+    const int inMaxRaysCast,
     const olylumoray::EMode inRenderMode
 )
     :
     _size(inSize),
     _sample_count(inSampleCount),
+    _max_rays_cast(inMaxRaysCast),
     _render_mode(inRenderMode)
 {}
 
@@ -39,6 +41,7 @@ RayCastWorker::run()
         this->_size.width(),
         this->_size.height(),
         this->_sample_count,
+        this->_max_rays_cast,
         this->_render_mode
     );
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);

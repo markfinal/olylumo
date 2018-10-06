@@ -22,6 +22,7 @@ raycast(
     const uint32_t inWidth,
     const uint32_t inHeight,
     const uint32_t inSampleCount,
+    const uint32_t inMaxRaysCast,
     const EMode inMode);
 
 } // namespace olylumoray

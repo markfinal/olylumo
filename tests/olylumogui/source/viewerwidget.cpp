@@ -79,6 +79,7 @@ ViewerWidget::do_ray_cast()
     this->_worker = new RayCastWorker(
         this->_frame_size->itemData(this->_current_frame_size_index).toSize(),
         this->_sample_count->value(),
+        1000,
         this->_current_render_mode
     );
     connect(

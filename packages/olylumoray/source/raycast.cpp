@@ -34,13 +34,14 @@ RGBA
 calculate_colour(
     const Ray &inRay,
     const float inMinT, // near plane
+    const int inMaxRaysCast,
     const EMode inMode)
 {
     HitableList hit_list;
     hit_list.append(new Sphere({ 0,0,-1,1 }, 0.5f));
     hit_list.append(new Sphere({ 0,-100.5f,-1,1 }, 100));
     HitRecord record;
-    if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
+    if ((inMaxRaysCast > 0) && hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
         switch (inMode)
         {
@@ -52,6 +53,7 @@ calculate_colour(
             (
                 Ray(record._pos, target - record._pos),
                 inMinT,
+                inMaxRaysCast - 1,
                 inMode
             ) * (1 - material_absorption);
         }
@@ -75,6 +77,7 @@ raycast(
     const uint32_t inWidth,
     const uint32_t inHeight,
     const uint32_t inSampleCount,
+    const uint32_t inMaxRaysCast,
     const EMode inMode)
 {
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
@@ -111,7 +114,7 @@ raycast(
                 );
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
-                colour += calculate_colour(ray, minT, inMode);
+                colour += calculate_colour(ray, minT, inMaxRaysCast, inMode);
             }
 
             *current_pixel = colour / static_cast<float>(inSampleCount);
