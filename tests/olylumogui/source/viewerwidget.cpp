@@ -166,13 +166,20 @@ ViewerWidget::setup_ui()
     );
 
     auto toolbar = new QToolBar;
-    toolbar->addWidget(this->_frame_size);
-    toolbar->addWidget(this->_render_mode);
-    toolbar->addWidget(this->_sample_count);
-    toolbar->addWidget(this->_max_rays_cast);
     layout->addWidget(toolbar);
+    toolbar->addWidget(new QLabel("Frame size:"));
+    toolbar->addWidget(this->_frame_size);
+    toolbar->addSeparator();
+    toolbar->addWidget(new QLabel("Render mode:"));
+    toolbar->addWidget(this->_render_mode);
+    toolbar->addSeparator();
+    toolbar->addWidget(new QLabel("Sample count:"));
+    toolbar->addWidget(this->_sample_count);
+    toolbar->addSeparator();
+    toolbar->addWidget(new QLabel("Max rays cast:"));
+    toolbar->addWidget(this->_max_rays_cast);
 
-    this->_image_label = new QLabel(this);
+    this->_image_label = new QLabel;
     layout->addWidget(this->_image_label);
 
     layout->addStretch();
