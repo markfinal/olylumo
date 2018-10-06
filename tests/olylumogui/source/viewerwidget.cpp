@@ -22,29 +22,7 @@ ViewerWidget::ViewerWidget(
     _type(inType)
 {
     this->setWindowTitle(inTitle);
-
-    auto layout = new QVBoxLayout;
-    this->setLayout(layout);
-
-    this->_frame_size = new QComboBox;
-    this->_frame_size->addItem("320x240", QVariant::fromValue(QSize(320, 240)));
-    this->_frame_size->addItem("640x480", QVariant::fromValue(QSize(640, 480)));
-    connect(
-        this->_frame_size,
-        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-        this,
-        &ViewerWidget::on_frame_size_change
-    );
-
-    auto toolbar = new QToolBar;
-    toolbar->addWidget(this->_frame_size);
-    layout->addWidget(toolbar);
-
-    this->_image_label = new QLabel(this);
-    layout->addWidget(this->_image_label);
-
-    layout->addStretch();
-
+    this->setup_ui();
     this->do_ray_cast();
 }
 
@@ -81,6 +59,33 @@ ViewerWidget::do_ray_cast()
 
     this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
     this->update();
+}
+
+void
+ViewerWidget::setup_ui()
+{
+    auto layout = new QVBoxLayout;
+    this->setLayout(layout);
+
+    this->_frame_size = new QComboBox;
+    this->_frame_size->addItem("320x240", QVariant::fromValue(QSize(320, 240)));
+    this->_frame_size->addItem("640x480", QVariant::fromValue(QSize(640, 480)));
+    this->_frame_size->addItem("1280x720", QVariant::fromValue(QSize(1280, 720)));
+    connect(
+        this->_frame_size,
+        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this,
+        &ViewerWidget::on_frame_size_change
+    );
+
+    auto toolbar = new QToolBar;
+    toolbar->addWidget(this->_frame_size);
+    layout->addWidget(toolbar);
+
+    this->_image_label = new QLabel(this);
+    layout->addWidget(this->_image_label);
+
+    layout->addStretch();
 }
 
 } // namespace olylumogui

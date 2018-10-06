@@ -71,9 +71,11 @@ raycast(
     // forward -> -z
     // this way, normals facing the camera plane will have a positive Z
 
+    const auto aspect_ratio = static_cast<float>(inWidth) / inHeight;
+
     // define a camera image plane for the pin-hole camera
-    Vec4 camera_image_plane_bottom_left(-1.33f, -1.0f, -1.0f, 0.0f); // used as direction
-    Vec4 camera_image_plane_horizonal(2.66f, 0.0f, 0.0f, 0.0f); // direction
+    Vec4 camera_image_plane_bottom_left(-1 * aspect_ratio, -1.0f, -1.0f, 0.0f); // used as direction
+    Vec4 camera_image_plane_horizonal(2 * aspect_ratio, 0.0f, 0.0f, 0.0f); // direction
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
 

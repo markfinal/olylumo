@@ -37,6 +37,9 @@ protected:
 
 private:
     void
+    setup_ui();
+
+    void
     do_ray_cast();
 
 private:
