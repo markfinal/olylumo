@@ -6,7 +6,6 @@
 
 #include "QtGui/QImage"
 #include "QtCore/QElapsedTimer"
-#include "QtCore/QDebug"
 
 namespace olylumogui
 {
@@ -69,8 +68,6 @@ RayCastWorker::run()
     }
 
     emit this->image_available(qimage);
-
-    qDebug() << timer.elapsed();
 }
 
 } // namespace olylumogui

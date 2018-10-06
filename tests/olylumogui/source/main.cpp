@@ -6,8 +6,6 @@
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
 
-#include <Windows.h>
-
 namespace
 {
 
@@ -32,8 +30,6 @@ myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString
         fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
         break;
     }
-    OutputDebugString(localMsg.constData());
-    OutputDebugString("\n");
 }
 
 } // anonymous namespace
