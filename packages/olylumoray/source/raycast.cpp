@@ -10,7 +10,7 @@
 #include <limits>
 #include <random>
 
-//#define DIFFUSE
+#define DIFFUSE
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -45,7 +45,8 @@ calculate_colour(
     {
 #ifdef DIFFUSE
         const auto target = record._pos + record._normal + random_in_unit_sphere();
-        return calculate_colour(Ray(record._pos, target - record._pos), inMinT);
+        const auto material_absorption = 0.5f;
+        return calculate_colour(Ray(record._pos, target - record._pos), inMinT) * (1 - material_absorption);
 #else
         return RGBA(record._normal + 1) * 0.5f;
 #endif
