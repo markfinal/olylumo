@@ -10,16 +10,16 @@
 namespace olylumoray
 {
 
-class HitableList :
+class OLYLUMORAYAPI HitableList :
     public Hitable
 {
 public:
-    OLYLUMORAYAPI void
+    void
     append(
         Hitable *inEntry);
 
 public:
-    OLYLUMORAYAPI bool
+    bool
     hit(
         const Ray &inRay,
         const float inMinT,
