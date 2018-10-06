@@ -4,9 +4,6 @@
 #include "olylumoray/api.h"
 #include "olylumoray/hitable.h"
 
-#include <list>
-#include <memory>
-
 namespace olylumoray
 {
 
@@ -14,6 +11,9 @@ class OLYLUMORAYAPI HitableList :
     public Hitable
 {
 public:
+    HitableList();
+    ~HitableList() override;
+
     void
     append(
         Hitable *inEntry);
@@ -27,7 +27,8 @@ public:
         HitRecord &outRecord) const override;
 
 private:
-    std::list<std::unique_ptr<Hitable>> _entries;
+    struct Impl;
+    Impl *_impl = nullptr; // would use std::unique_ptr if it weren't for C4251 on MSVC
 };
 
 } // namespace olylumoray
