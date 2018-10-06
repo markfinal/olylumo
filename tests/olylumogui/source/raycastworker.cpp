@@ -26,6 +26,12 @@ RayCastWorker::result() const
     return this->_result;
 }
 
+int
+RayCastWorker::progress_max() const
+{
+    return this->_size.height();
+}
+
 void
 RayCastWorker::run()
 {
@@ -37,6 +43,7 @@ RayCastWorker::run()
     );
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
     auto src = image->pixels();
+    emit this->progress_changed(0);
     for (auto row = 0u; row < image->height(); ++row)
     {
         auto dst = qimage->scanLine(row);
@@ -46,6 +53,7 @@ RayCastWorker::run()
             ++src;
             dst += 4;
         }
+        emit this->progress_changed(row + 1);
     }
 
     this->_result = qimage;

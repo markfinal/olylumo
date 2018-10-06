@@ -29,6 +29,12 @@ public:
     QImage *
     result() const;
 
+    int
+    progress_max() const;
+
+signals:
+    void progress_changed(int);
+
 protected:
     void
     run() override;

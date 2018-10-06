@@ -9,6 +9,7 @@ class QLabel;
 class QComboBox;
 class QSpinBox;
 class QImage;
+class QProgressBar;
 
 namespace olylumoray
 {
@@ -57,6 +58,10 @@ protected:
     void
     on_new_image();
 
+    void
+    on_progress_change(
+        int inNewValue);
+
 private:
     void
     setup_ui();
@@ -70,6 +75,7 @@ private:
     QComboBox              *_frame_size;
     QComboBox              *_render_mode;
     QSpinBox               *_sample_count;
+    QProgressBar           *_progress;
     int                     _current_frame_size_index = 0;
     olylumoray::EMode       _current_render_mode;
     RayCastWorker          *_worker = nullptr;

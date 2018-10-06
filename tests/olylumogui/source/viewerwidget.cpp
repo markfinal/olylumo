@@ -11,6 +11,8 @@
 #include "QtWidgets/QToolBar"
 #include "QtWidgets/QComboBox"
 #include "QtWidgets/QSpinBox"
+#include "QtWidgets/QStatusBar"
+#include "QtWidgets/QProgressBar"
 
 namespace olylumogui
 {
@@ -64,6 +66,15 @@ ViewerWidget::on_new_image()
 {
     auto qimage = this->_worker->result();
     this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
+    this->_progress->setVisible(false);
+    this->_progress->setValue(0);
+}
+
+void
+ViewerWidget::on_progress_change(
+    int inNewValue)
+{
+    this->_progress->setValue(inNewValue);
 }
 
 void
@@ -83,8 +94,20 @@ ViewerWidget::do_ray_cast()
         this->_worker,
         &QThread::finished,
         this,
-        &ViewerWidget::on_new_image
+        &ViewerWidget::on_new_image,
+        Qt::QueuedConnection
     );
+    connect(
+        this->_worker,
+        &RayCastWorker::progress_changed,
+        this,
+        &ViewerWidget::on_progress_change,
+        Qt::QueuedConnection
+    );
+    this->_progress->setVisible(true);
+    this->_progress->setMinimum(0);
+    this->_progress->setMaximum(this->_worker->progress_max());
+    this->_progress->setValue(0);
     this->_worker->start();
 }
 
@@ -136,6 +159,12 @@ ViewerWidget::setup_ui()
     layout->addWidget(this->_image_label);
 
     layout->addStretch();
+
+    this->_progress = new QProgressBar;
+
+    auto status_bar = new QStatusBar;
+    status_bar->addWidget(this->_progress);
+    layout->addWidget(status_bar);
 }
 
 } // namespace olylumogui
