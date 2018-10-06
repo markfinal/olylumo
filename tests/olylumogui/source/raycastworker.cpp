@@ -26,7 +26,9 @@ int
 RayCastWorker::progress_max() const
 {
     const auto sample_count = (this->_sample_count > 0) ? this->_sample_count : 1;
-    return this->_size.height() * (sample_count + 1); // +1 in order to count the image scanline conversion
+    const auto ray_cost = this->_size.height() * this->_size.width() * sample_count;
+    const auto scanline_convert_cost = this->_size.height();
+    return ray_cost + scanline_convert_cost;
 }
 
 void
