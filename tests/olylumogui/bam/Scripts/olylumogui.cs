@@ -1,5 +1,6 @@
 using Bam.Core;
 using QtCommon.MocExtension;
+using QtCommon.RccExtension;
 namespace olylumogui
 {
     class olylumoGUI :
@@ -15,6 +16,12 @@ namespace olylumogui
             foreach (var header in headers.Children)
             {
                 source.MocHeader(header);
+            }
+
+            var qrcFiles = this.CreateQrcContainer("$(packagedir)/resources/*.qrc");
+            foreach (var qrc in qrcFiles.Children)
+            {
+                source.Rcc(qrc);
             }
 
             this.CompileAndLinkAgainst<olylumoray.RayTrace>(source);
