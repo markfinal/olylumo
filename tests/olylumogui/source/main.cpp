@@ -52,7 +52,7 @@ main(
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();
 
-    window.show();
+    window.showMaximized();
     auto result = app.exec();
     return result;
 }
