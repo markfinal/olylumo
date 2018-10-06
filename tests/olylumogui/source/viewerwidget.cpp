@@ -71,13 +71,6 @@ ViewerWidget::on_new_image()
 }
 
 void
-ViewerWidget::on_progress_change(
-    int inNewValue)
-{
-    this->_progress->setValue(inNewValue);
-}
-
-void
 ViewerWidget::do_ray_cast()
 {
     if (nullptr != this->_worker)
@@ -100,9 +93,8 @@ ViewerWidget::do_ray_cast()
     connect(
         this->_worker,
         &RayCastWorker::progress_changed,
-        this,
-        &ViewerWidget::on_progress_change,
-        Qt::QueuedConnection
+        this->_progress,
+        &QProgressBar::setValue
     );
     this->_progress->setVisible(true);
     this->_progress->setMinimum(0);

@@ -58,10 +58,6 @@ protected:
     void
     on_new_image();
 
-    void
-    on_progress_change(
-        int inNewValue);
-
 private:
     void
     setup_ui();
