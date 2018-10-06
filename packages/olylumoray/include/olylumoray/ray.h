@@ -9,6 +9,7 @@ namespace olylumoray
 class Ray
 {
 public:
+    Ray();
     Ray(
         const Vec4 &inOrigin,
         const Vec4 &inDirection);

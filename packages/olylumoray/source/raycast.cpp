@@ -6,14 +6,20 @@
 #include "olylumoray/sphere.h"
 #include "olylumoray/hitrecord.h"
 #include "olylumoray/hitablelist.h"
+#include "olylumoray/material.h"
 
 #include <limits>
 #include <random>
 
-std::random_device rd;
-std::mt19937 gen(rd());
-std::uniform_real_distribution<float> unit_dist(0, 1);
-std::uniform_real_distribution<float> cube_dist(-1, 1);
+namespace
+{
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> unit_dist(0, 1);
+    std::uniform_real_distribution<float> cube_dist(-1, 1);
+
+} // anonymous namespace
 
 namespace olylumoray
 {
@@ -45,24 +51,21 @@ calculate_colour(
         {
         case EMode::Colour:
         {
-            const auto target = record._pos + record._normal + random_in_unit_sphere();
-            const auto material_absorption = 0.5f;
-            return calculate_colour
-            (
-                inWorld,
-                Ray(record._pos, target - record._pos),
-                inMinT,
-                inMaxRaysCast - 1,
-                inMode
-            ) * (1 - material_absorption);
+            Ray scattered;
+            RGBA attenuation;
+            if (record._material->scatter(inRay, record, attenuation, scattered))
+            {
+                return attenuation * calculate_colour(inWorld, scattered, inMinT, inMaxRaysCast - 1, inMode);
+            }
+            else
+            {
+                return RGBA(0, 0, 0, 1);
+            }
         }
         break;
 
         case EMode::WorldSpaceNormals:
-        {
             return RGBA(record._normal + 1) * 0.5f;
-        }
-        break;
         }
     }
     const auto unit = inRay.direction().normalise();

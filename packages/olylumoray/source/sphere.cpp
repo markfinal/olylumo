@@ -10,10 +10,12 @@ namespace olylumoray
 
 Sphere::Sphere(
     const Vec4 &inOrigin,
-    const float inRadius)
+    const float inRadius,
+    Material *inMaterial)
     :
     _origin(inOrigin),
-    _radius(inRadius)
+    _radius(inRadius),
+    _material(inMaterial)
 {}
 
 bool
@@ -39,6 +41,7 @@ Sphere::hit(
             outRecord._t = t;
             outRecord._pos = inRay.pos(t);
             outRecord._normal = (outRecord._pos - this->_origin).normalise();
+            outRecord._material = this->_material;
             return true;
         }
     }
@@ -50,6 +53,7 @@ Sphere::hit(
             outRecord._t = t;
             outRecord._pos = inRay.pos(t);
             outRecord._normal = (outRecord._pos - this->_origin).normalise();
+            outRecord._material = this->_material;
             return true;
         }
     }

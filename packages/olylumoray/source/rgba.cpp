@@ -47,6 +47,16 @@ RGBA &RGBA::operator+=(const RGBA &inOther)
     return *this;
 }
 
+RGBA RGBA::operator*(const RGBA &inOther) const
+{
+    RGBA result(*this);
+    result._red *= inOther._red;
+    result._green *= inOther._green;
+    result._blue *= inOther._blue;
+    result._alpha *= inOther._alpha;
+    return result;
+}
+
 RGBA RGBA::operator*(const float inScale) const
 {
     RGBA result(*this);

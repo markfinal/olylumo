@@ -6,11 +6,14 @@
 namespace olylumoray
 {
 
+class Material;
+
 struct HitRecord
 {
-    float _t;
-    Vec4  _pos;
-    Vec4  _normal;
+    float     _t;
+    Vec4      _pos;
+    Vec4      _normal;
+    Material *_material = nullptr;
 };
 
 } // namespace olylumoray

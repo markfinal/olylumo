@@ -5,6 +5,9 @@
 namespace olylumoray
 {
 
+Ray::Ray()
+{}
+
 Ray::Ray(
     const Vec4 &inOrigin,
     const Vec4 &inDirection)

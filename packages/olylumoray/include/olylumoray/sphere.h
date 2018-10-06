@@ -8,13 +8,16 @@
 namespace olylumoray
 {
 
+class Material;
+
 class Sphere final :
     public Hitable
 {
 public:
     OLYLUMORAYAPI Sphere(
         const Vec4 &inOrigin,
-        const float inRadius);
+        const float inRadius,
+        Material *inMaterial);
 
     bool
     hit(
@@ -24,8 +27,9 @@ public:
         HitRecord &outRecord) const override;
 
 private:
-    Vec4 _origin;
-    float _radius;
+    Vec4      _origin;
+    float     _radius;
+    Material *_material;
 };
 
 } // namespace olylumoray

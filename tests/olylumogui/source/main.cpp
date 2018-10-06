@@ -1,6 +1,8 @@
 #include "viewerwidget.h"
 #include "olylumoray/hitablelist.h"
 #include "olylumoray/sphere.h"
+#include "olylumoray/lambertian.h"
+#include "olylumoray/metal.h"
 
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
@@ -50,8 +52,8 @@ main(
     window.setCentralWidget(mdi);
 
     olylumoray::HitableList world;
-    world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f));
-    world.append(new olylumoray::Sphere({ 0,-100.5f,-1,1 }, 100));
+    world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f, new olylumoray::Lambertian({ 0.8f, 0.3f, 0.3f, 1 })));
+    world.append(new olylumoray::Sphere({ 0,-100.5f,-1,1 }, 100, new olylumoray::Lambertian({ 0.8f, 0.8f, 0.0f, 1 })));
 
     auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace, &world);
     mdi->addSubWindow(rayTraceViewer);
