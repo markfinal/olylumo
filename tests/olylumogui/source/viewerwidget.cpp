@@ -84,7 +84,12 @@ ViewerWidget::do_ray_cast()
 {
     if (nullptr != this->_worker)
     {
-        // TODO: wait for it to finish
+        if (!this->_worker->isFinished())
+        {
+            this->_worker->abort();
+            this->_worker->wait();
+        }
+        this->_worker->deleteLater();
     }
 
     this->_worker = new RayCastWorker(
@@ -96,19 +101,17 @@ ViewerWidget::do_ray_cast()
     );
     connect(
         this->_worker,
+        &RayCastWorker::progress_changed,
+        this->_progress,
+        &QProgressBar::setValue
+    );
+    connect(
+        this->_worker,
         &RayCastWorker::image_available,
         this,
         &ViewerWidget::on_new_image,
         Qt::QueuedConnection
     );
-#if 1
-    connect(
-        this->_worker,
-        &RayCastWorker::progress_changed,
-        this->_progress,
-        &QProgressBar::setValue
-    );
-#endif
     this->_progress->setVisible(true);
     this->_progress->setMinimum(0);
     this->_progress->setMaximum(100);

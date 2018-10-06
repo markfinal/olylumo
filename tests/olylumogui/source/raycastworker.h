@@ -31,6 +31,9 @@ public:
         const olylumoray::EMode inRenderMode
     );
 
+    void
+    abort();
+
 private:
     uint32_t
     progress_tick() const;
@@ -50,6 +53,7 @@ private:
     uint32_t             _max_rays_cast;
     uint32_t             _progress_tick;
     olylumoray::EMode    _render_mode;
+    bool                 _abort = false;
 };
 
 } // namespace olylumogui

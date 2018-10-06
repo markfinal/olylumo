@@ -26,6 +26,12 @@ RayCastWorker::RayCastWorker(
     this->_progress_tick = this->progress_tick();
 }
 
+void
+RayCastWorker::abort()
+{
+    this->_abort = true;
+}
+
 uint32_t
 RayCastWorker::progress_tick() const
 {
@@ -49,14 +55,24 @@ RayCastWorker::run()
         [this](const int inProgress)
         {
             emit this->progress_changed(inProgress);
-        }
+        },
+        &this->_abort
     );
+
+    if (this->_abort)
+    {
+        return;
+    }
 
     // ignoring scanline convertion to bytes in the progress
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
     auto src = image->pixels();
     for (auto row = 0u; row < image->height(); ++row)
     {
+        if (this->_abort)
+        {
+            return;
+        }
         auto dst = qimage->scanLine(row);
         for (auto col = 0u; col < image->width(); ++col)
         {
@@ -66,6 +82,10 @@ RayCastWorker::run()
         }
     }
 
+    if (this->_abort)
+    {
+        return;
+    }
     emit this->image_available(qimage);
 }
 

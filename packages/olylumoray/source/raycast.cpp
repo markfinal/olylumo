@@ -24,18 +24,6 @@ namespace
 namespace olylumoray
 {
 
-Vec4
-random_in_unit_sphere()
-{
-    Vec4 p;
-    do
-    {
-        p = Vec4(cube_dist(gen), cube_dist(gen), cube_dist(gen), 0);
-    }
-    while (p.squared_length() >= 1.0f);
-    return p;
-}
-
 RGBA
 calculate_colour(
     Hitable *inWorld,
@@ -83,7 +71,8 @@ raycast(
     const uint32_t inMaxRaysCast,
     const EMode inMode,
     const uint32_t inProgressTick,
-    std::function<void(int)> inProgressCallback)
+    std::function<void(int)> inProgressCallback,
+    bool *inAbortState)
 {
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
 
@@ -109,6 +98,10 @@ raycast(
     {
         for (auto col = 0u; col < inWidth; ++col)
         {
+            if (nullptr != inAbortState && *inAbortState)
+            {
+                return nullptr;
+            }
             RGBA colour;
             for (auto sample = 0u; sample < inSampleCount; ++sample)
             {

@@ -28,7 +28,8 @@ raycast(
     const uint32_t inMaxRaysCast,
     const EMode inMode,
     const uint32_t inProgressTick,
-    std::function<void(int)> inProgressCallback);
+    std::function<void(int)> inProgressCallback,
+    bool *inAbortState);
 
 } // namespace olylumoray
 
