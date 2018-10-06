@@ -10,8 +10,6 @@
 #include <limits>
 #include <random>
 
-#define DIFFUSE
-
 std::random_device rd;
 std::mt19937 gen(rd());
 std::uniform_real_distribution<float> unit_dist(0, 1);
@@ -35,7 +33,8 @@ random_in_unit_sphere()
 RGBA
 calculate_colour(
     const Ray &inRay,
-    const float inMinT) // near plane
+    const float inMinT, // near plane
+    const EMode inMode)
 {
     HitableList hit_list;
     hit_list.append(new Sphere({ 0,0,-1,1 }, 0.5f));
@@ -43,13 +42,27 @@ calculate_colour(
     HitRecord record;
     if (hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
-#ifdef DIFFUSE
-        const auto target = record._pos + record._normal + random_in_unit_sphere();
-        const auto material_absorption = 0.5f;
-        return calculate_colour(Ray(record._pos, target - record._pos), inMinT) * (1 - material_absorption);
-#else
-        return RGBA(record._normal + 1) * 0.5f;
-#endif
+        switch (inMode)
+        {
+        case EMode::Colour:
+        {
+            const auto target = record._pos + record._normal + random_in_unit_sphere();
+            const auto material_absorption = 0.5f;
+            return calculate_colour
+            (
+                Ray(record._pos, target - record._pos),
+                inMinT,
+                inMode
+            ) * (1 - material_absorption);
+        }
+        break;
+
+        case EMode::WorldSpaceNormals:
+        {
+            return RGBA(record._normal + 1) * 0.5f;
+        }
+        break;
+        }
     }
     const auto unit = inRay.direction().normalise();
     const auto background_t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
@@ -60,7 +73,8 @@ calculate_colour(
 std::unique_ptr<Image>
 raycast(
     const uint32_t inWidth,
-    const uint32_t inHeight)
+    const uint32_t inHeight,
+    const EMode inMode)
 {
     const auto num_samples = 1u;
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
@@ -97,7 +111,7 @@ raycast(
                 );
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
-                colour += calculate_colour(ray, minT);
+                colour += calculate_colour(ray, minT, inMode);
             }
 
             *current_pixel = colour / num_samples;

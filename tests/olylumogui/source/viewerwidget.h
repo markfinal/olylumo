@@ -7,6 +7,11 @@ class QMdiArea;
 class QLabel;
 class QComboBox;
 
+namespace olylumoray
+{
+    enum class EMode;
+} // namespace olylumoray
+
 namespace olylumogui
 {
 
@@ -35,6 +40,10 @@ protected:
     on_frame_size_change(
         int inNewIndex);
 
+    void
+    on_render_mode_change(
+        int inNewIndex);
+
 private:
     void
     setup_ui();
@@ -43,10 +52,12 @@ private:
     do_ray_cast();
 
 private:
-    EViewerType  _type;
-    QLabel      *_image_label;
-    QComboBox   *_frame_size;
-    int          _current_frame_size_index = 0;
+    EViewerType       _type;
+    QLabel           *_image_label;
+    QComboBox        *_frame_size;
+    QComboBox        *_render_mode;
+    int               _current_frame_size_index = 0;
+    olylumoray::EMode _current_render_mode;
 };
 
 } // namespace olylumogui

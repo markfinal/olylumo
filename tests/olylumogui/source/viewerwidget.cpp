@@ -19,7 +19,8 @@ ViewerWidget::ViewerWidget(
     const EViewerType inType)
     :
     QWidget(inParent),
-    _type(inType)
+    _type(inType),
+    _current_render_mode(olylumoray::EMode::Colour)
 {
     this->setWindowTitle(inTitle);
     this->setup_ui();
@@ -40,10 +41,22 @@ ViewerWidget::on_frame_size_change(
 }
 
 void
+ViewerWidget::on_render_mode_change(
+    int inNewIndex)
+{
+    this->_current_render_mode = static_cast<olylumoray::EMode>(inNewIndex);
+    this->do_ray_cast();
+}
+
+void
 ViewerWidget::do_ray_cast()
 {
     const auto frame_size = this->_frame_size->itemData(this->_current_frame_size_index).toSize();
-    auto image = olylumoray::raycast(frame_size.width(), frame_size.height());
+    auto image = olylumoray::raycast(
+        frame_size.width(),
+        frame_size.height(),
+        this->_current_render_mode
+    );
     auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
     auto src = image->pixels();
     for (auto row = 0u; row < image->height(); ++row)
@@ -78,8 +91,19 @@ ViewerWidget::setup_ui()
         &ViewerWidget::on_frame_size_change
     );
 
+    this->_render_mode = new QComboBox;
+    this->_render_mode->addItem("Colour"); // olylumoray::EMode::Colour
+    this->_render_mode->addItem("World space normals"); // olylumo::EMode::WorldSpaceNormals
+    connect(
+        this->_render_mode,
+        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this,
+        &ViewerWidget::on_render_mode_change
+    );
+
     auto toolbar = new QToolBar;
     toolbar->addWidget(this->_frame_size);
+    toolbar->addWidget(this->_render_mode);
     layout->addWidget(toolbar);
 
     this->_image_label = new QLabel(this);

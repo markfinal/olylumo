@@ -11,10 +11,17 @@ namespace olylumoray
 
 class Image;
 
+enum class EMode
+{
+    Colour = 0,
+    WorldSpaceNormals
+};
+
 extern OLYLUMORAYAPI std::unique_ptr<Image>
 raycast(
     const uint32_t inWidth,
-    const uint32_t inHeight);
+    const uint32_t inHeight,
+    const EMode inMode);
 
 } // namespace olylumoray
 
