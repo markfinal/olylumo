@@ -9,6 +9,7 @@
 namespace olylumoray
 {
     enum class EMode;
+    class Hitable;
 } // namespace olylumoray
 
 class QImage;
@@ -23,6 +24,7 @@ class RayCastWorker final :
 
 public:
     RayCastWorker(
+        olylumoray::Hitable *inWorld,
         const QSize inSize,
         const uint32_t inSampleCount,
         const uint32_t inMaxRaysCast,
@@ -42,11 +44,12 @@ protected:
     run() override;
 
 private:
-    QSize             _size;
-    uint32_t          _sample_count;
-    uint32_t          _max_rays_cast;
-    uint32_t          _progress_tick;
-    olylumoray::EMode _render_mode;
+    olylumoray::Hitable *_world;
+    QSize                _size;
+    uint32_t             _sample_count;
+    uint32_t             _max_rays_cast;
+    uint32_t             _progress_tick;
+    olylumoray::EMode    _render_mode;
 };
 
 } // namespace olylumogui

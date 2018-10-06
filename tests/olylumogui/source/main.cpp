@@ -1,4 +1,6 @@
 #include "viewerwidget.h"
+#include "olylumoray/hitablelist.h"
+#include "olylumoray/sphere.h"
 
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
@@ -47,7 +49,11 @@ main(
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
 
-    auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace);
+    olylumoray::HitableList world;
+    world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f));
+    world.append(new olylumoray::Sphere({ 0,-100.5f,-1,1 }, 100));
+
+    auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace, &world);
     mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();

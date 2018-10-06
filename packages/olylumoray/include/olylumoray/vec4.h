@@ -1,6 +1,8 @@
 #ifndef OLYLUMORAY_VEC4_H
 #define OLYLUMORAY_VEC4_H
 
+#include "olylumoray/api.h"
+
 namespace olylumoray
 {
 
@@ -8,7 +10,7 @@ class Vec4
 {
 public:
     Vec4();
-    Vec4(const float inX, const float inY, const float inZ, const float inW);
+    OLYLUMORAYAPI Vec4(const float inX, const float inY, const float inZ, const float inW);
 
     float x() const;
     float y() const;

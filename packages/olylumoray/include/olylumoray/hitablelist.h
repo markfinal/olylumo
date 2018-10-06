@@ -1,6 +1,7 @@
 #ifndef OLYLUMORAY_HITABLELIST_H
 #define OLYLUMORAY_HITABLELIST_H
 
+#include "olylumoray/api.h"
 #include "olylumoray/hitable.h"
 
 #include <list>
@@ -13,12 +14,12 @@ class HitableList :
     public Hitable
 {
 public:
-    void
+    OLYLUMORAYAPI void
     append(
         Hitable *inEntry);
 
 public:
-    bool
+    OLYLUMORAYAPI bool
     hit(
         const Ray &inRay,
         const float inMinT,

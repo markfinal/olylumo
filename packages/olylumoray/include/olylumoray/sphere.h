@@ -1,6 +1,7 @@
 #ifndef OLYLUMORAY_SPHERE_H
 #define OLYLUMORAY_SPHERE_H
 
+#include "olylumoray/api.h"
 #include "olylumoray/hitable.h"
 #include "olylumoray/vec4.h"
 
@@ -11,7 +12,7 @@ class Sphere final :
     public Hitable
 {
 public:
-    Sphere(
+    OLYLUMORAYAPI Sphere(
         const Vec4 &inOrigin,
         const float inRadius);
 

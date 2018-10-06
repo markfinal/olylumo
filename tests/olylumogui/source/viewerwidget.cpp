@@ -18,10 +18,12 @@ namespace olylumogui
 ViewerWidget::ViewerWidget(
     QMdiArea *inParent,
     const QString &inTitle,
-    const EViewerType inType)
+    const EViewerType inType,
+    olylumoray::Hitable *inWorld)
     :
     QWidget(inParent),
     _type(inType),
+    _world(inWorld),
     _current_render_mode(olylumoray::EMode::Colour)
 {
     this->setWindowTitle(inTitle);
@@ -86,6 +88,7 @@ ViewerWidget::do_ray_cast()
     }
 
     this->_worker = new RayCastWorker(
+        this->_world,
         this->_frame_size->itemData(this->_current_frame_size_index).toSize(),
         this->_sample_count->value(),
         this->_max_rays_cast->itemData(this->_current_max_rays_cast_index).toUInt(),

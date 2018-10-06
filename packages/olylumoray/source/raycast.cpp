@@ -32,16 +32,14 @@ random_in_unit_sphere()
 
 RGBA
 calculate_colour(
+    Hitable *inWorld,
     const Ray &inRay,
     const float inMinT, // near plane
     const uint32_t inMaxRaysCast,
     const EMode inMode)
 {
-    HitableList hit_list;
-    hit_list.append(new Sphere({ 0,0,-1,1 }, 0.5f));
-    hit_list.append(new Sphere({ 0,-100.5f,-1,1 }, 100));
     HitRecord record;
-    if ((inMaxRaysCast > 0) && hit_list.hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
+    if ((inMaxRaysCast > 0) && inWorld->hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
         switch (inMode)
         {
@@ -51,6 +49,7 @@ calculate_colour(
             const auto material_absorption = 0.5f;
             return calculate_colour
             (
+                inWorld,
                 Ray(record._pos, target - record._pos),
                 inMinT,
                 inMaxRaysCast - 1,
@@ -74,6 +73,7 @@ calculate_colour(
 
 std::unique_ptr<Image>
 raycast(
+    Hitable *inWorld,
     const uint32_t inWidth,
     const uint32_t inHeight,
     const uint32_t inSampleCount,
@@ -119,7 +119,7 @@ raycast(
                 );
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
-                colour += calculate_colour(ray, minT, inMaxRaysCast, inMode);
+                colour += calculate_colour(inWorld, ray, minT, inMaxRaysCast, inMode);
                 ++progress;
             }
 
