@@ -7,19 +7,9 @@
 #include "olylumoray/hitrecord.h"
 #include "olylumoray/hitablelist.h"
 #include "olylumoray/material.h"
+#include "olylumoray/utils.h"
 
 #include <limits>
-#include <random>
-
-namespace
-{
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> unit_dist(0, 1);
-    std::uniform_real_distribution<float> cube_dist(-1, 1);
-
-} // anonymous namespace
 
 namespace olylumoray
 {
@@ -105,9 +95,9 @@ raycast(
             RGBA colour;
             for (auto sample = 0u; sample < inSampleCount; ++sample)
             {
-                const auto u = static_cast<float>(col + unit_dist(gen)) / inWidth;
+                const auto u = static_cast<float>(col + random_between_zero_and_one()) / inWidth;
                 // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
-                const auto v = static_cast<float>(inHeight - row + unit_dist(gen)) / inHeight;
+                const auto v = static_cast<float>(inHeight - row + random_between_zero_and_one()) / inHeight;
 
                 Ray ray(
                     camera_origin,

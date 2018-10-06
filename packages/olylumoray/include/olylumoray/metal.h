@@ -13,7 +13,8 @@ class Metal final :
 {
 public:
     OLYLUMORAYAPI Metal(
-        const RGBA &inAlbedo);
+        const RGBA &inAlbedo,
+        const float inRoughness);
 
     bool
     scatter(
@@ -24,7 +25,8 @@ public:
     ) const override;
 
 private:
-    RGBA _albedo;
+    RGBA  _albedo;
+    float _roughness;
 };
 
 } // namespace olylumoray
