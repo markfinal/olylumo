@@ -11,6 +11,8 @@
 #include "QtWidgets/QComboBox"
 #include "QtWidgets/QSpinBox"
 
+#include "QtConcurrent/qtconcurrentrun.h"
+
 namespace olylumogui
 {
 
@@ -25,7 +27,14 @@ ViewerWidget::ViewerWidget(
 {
     this->setWindowTitle(inTitle);
     this->setup_ui();
-    this->do_ray_cast();
+
+    connect(
+        &this->_ray_cast_watcher,
+        &QFutureWatcher<QImage*>::finished,
+        this,
+        &ViewerWidget::on_new_image
+    );
+    this->_ray_cast_watcher.setFuture(QtConcurrent::run(this, &ViewerWidget::do_ray_cast));
 }
 
 EViewerType ViewerWidget::type() const
@@ -38,7 +47,7 @@ ViewerWidget::on_frame_size_changed(
     int inNewIndex)
 {
     this->_current_frame_size_index = inNewIndex;
-    this->do_ray_cast();
+    this->_ray_cast_watcher.setFuture(QtConcurrent::run(this, &ViewerWidget::do_ray_cast));
 }
 
 void
@@ -46,7 +55,7 @@ ViewerWidget::on_render_mode_changed(
     int inNewIndex)
 {
     this->_current_render_mode = static_cast<olylumoray::EMode>(inNewIndex);
-    this->do_ray_cast();
+    this->_ray_cast_watcher.setFuture(QtConcurrent::run(this, &ViewerWidget::do_ray_cast));
 }
 
 void
@@ -54,10 +63,19 @@ ViewerWidget::on_sample_count_changed(
     int inNewValue)
 {
     (void)inNewValue;
-    this->do_ray_cast();
+    this->_ray_cast_watcher.setFuture(QtConcurrent::run(this, &ViewerWidget::do_ray_cast));
 }
 
 void
+ViewerWidget::on_new_image()
+{
+    auto qimage = this->_ray_cast_watcher.future().result();
+    this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
+    //this->update();
+    delete qimage;
+}
+
+QImage *
 ViewerWidget::do_ray_cast()
 {
     const auto frame_size = this->_frame_size->itemData(this->_current_frame_size_index).toSize();
@@ -80,8 +98,7 @@ ViewerWidget::do_ray_cast()
         }
     }
 
-    this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
-    this->update();
+    return qimage;
 }
 
 void

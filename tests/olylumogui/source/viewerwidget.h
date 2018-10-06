@@ -2,11 +2,13 @@
 #define OLYLUMOGUI_VIEWERWIDGET_H
 
 #include "QtWidgets/QWidget"
+#include "QtCore/QFutureWatcher"
 
 class QMdiArea;
 class QLabel;
 class QComboBox;
 class QSpinBox;
+class QImage;
 
 namespace olylumoray
 {
@@ -50,21 +52,25 @@ protected:
         int inNewValue
     );
 
+    void
+    on_new_image();
+
 private:
     void
     setup_ui();
 
-    void
+    QImage *
     do_ray_cast();
 
 private:
-    EViewerType       _type;
-    QLabel           *_image_label;
-    QComboBox        *_frame_size;
-    QComboBox        *_render_mode;
-    QSpinBox         *_sample_count;
-    int               _current_frame_size_index = 0;
-    olylumoray::EMode _current_render_mode;
+    EViewerType             _type;
+    QLabel                 *_image_label;
+    QComboBox              *_frame_size;
+    QComboBox              *_render_mode;
+    QSpinBox               *_sample_count;
+    int                     _current_frame_size_index = 0;
+    olylumoray::EMode       _current_render_mode;
+    QFutureWatcher<QImage*> _ray_cast_watcher;
 };
 
 } // namespace olylumogui
