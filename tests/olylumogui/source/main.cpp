@@ -64,7 +64,8 @@ main(
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
 
-    /*auto rayTraceViewer = */new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace);
+    auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace);
+    mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();
 
