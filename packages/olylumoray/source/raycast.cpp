@@ -34,7 +34,7 @@ RGBA
 calculate_colour(
     const Ray &inRay,
     const float inMinT, // near plane
-    const int inMaxRaysCast,
+    const uint32_t inMaxRaysCast,
     const EMode inMode)
 {
     HitableList hit_list;

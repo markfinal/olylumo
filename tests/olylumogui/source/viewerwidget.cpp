@@ -60,6 +60,14 @@ ViewerWidget::on_sample_count_changed(
 }
 
 void
+ViewerWidget::on_max_rays_cast_changed(
+    int inNewIndex)
+{
+    this->_current_max_rays_cast_index = inNewIndex;
+    this->do_ray_cast();
+}
+
+void
 ViewerWidget::on_new_image()
 {
     auto qimage = this->_worker->result();
@@ -79,7 +87,7 @@ ViewerWidget::do_ray_cast()
     this->_worker = new RayCastWorker(
         this->_frame_size->itemData(this->_current_frame_size_index).toSize(),
         this->_sample_count->value(),
-        1000,
+        this->_max_rays_cast->itemData(this->_current_max_rays_cast_index).toUInt(),
         this->_current_render_mode
     );
     connect(
@@ -140,10 +148,27 @@ ViewerWidget::setup_ui()
         &ViewerWidget::on_sample_count_changed
     );
 
+    this->_max_rays_cast = new QComboBox;
+    this->_max_rays_cast->addItem("Infinite", QVariant::fromValue(std::numeric_limits<uint32_t>::max()));
+    this->_max_rays_cast->addItem("1024", QVariant::fromValue(1024));
+    this->_max_rays_cast->addItem("256", QVariant::fromValue(256u));
+    this->_max_rays_cast->addItem("16", QVariant::fromValue(16u));
+    this->_max_rays_cast->addItem("4", QVariant::fromValue(4u));
+    this->_max_rays_cast->addItem("2", QVariant::fromValue(2u));
+    this->_max_rays_cast->addItem("1", QVariant::fromValue(1u));
+    this->_max_rays_cast->addItem("0", QVariant::fromValue(0u));
+    connect(
+        this->_max_rays_cast,
+        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this,
+        &ViewerWidget::on_max_rays_cast_changed
+    );
+
     auto toolbar = new QToolBar;
     toolbar->addWidget(this->_frame_size);
     toolbar->addWidget(this->_render_mode);
     toolbar->addWidget(this->_sample_count);
+    toolbar->addWidget(this->_max_rays_cast);
     layout->addWidget(toolbar);
 
     this->_image_label = new QLabel(this);

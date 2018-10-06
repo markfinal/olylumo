@@ -11,8 +11,8 @@ namespace olylumogui
 
 RayCastWorker::RayCastWorker(
     const QSize inSize,
-    const int inSampleCount,
-    const int inMaxRaysCast,
+    const uint32_t inSampleCount,
+    const uint32_t inMaxRaysCast,
     const olylumoray::EMode inRenderMode
 )
     :

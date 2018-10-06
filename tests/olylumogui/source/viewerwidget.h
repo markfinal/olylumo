@@ -56,6 +56,10 @@ protected:
     );
 
     void
+    on_max_rays_cast_changed(
+        int inNewIndex);
+
+    void
     on_new_image();
 
 private:
@@ -71,9 +75,11 @@ private:
     QComboBox              *_frame_size;
     QComboBox              *_render_mode;
     QSpinBox               *_sample_count;
+    QComboBox              *_max_rays_cast;
     QProgressBar           *_progress;
     int                     _current_frame_size_index = 0;
     olylumoray::EMode       _current_render_mode;
+    int                     _current_max_rays_cast_index = 0;
     RayCastWorker          *_worker = nullptr;
 };
 

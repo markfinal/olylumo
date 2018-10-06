@@ -4,6 +4,8 @@
 #include "QtCore/QThread"
 #include "QtCore/QSize"
 
+#include <cstdint>
+
 namespace olylumoray
 {
     enum class EMode;
@@ -22,8 +24,8 @@ class RayCastWorker final :
 public:
     RayCastWorker(
         const QSize inSize,
-        const int inSampleCount,
-        const int inMaxRaysCast,
+        const uint32_t inSampleCount,
+        const uint32_t inMaxRaysCast,
         const olylumoray::EMode inRenderMode
     );
 
@@ -42,8 +44,8 @@ protected:
 
 private:
     QSize             _size;
-    int               _sample_count;
-    int               _max_rays_cast;
+    uint32_t          _sample_count;
+    uint32_t          _max_rays_cast;
     olylumoray::EMode _render_mode;
     QImage           *_result = nullptr;
 };
