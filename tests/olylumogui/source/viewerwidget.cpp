@@ -2,8 +2,6 @@
 #include "raycastworker.h"
 
 #include "olylumoray/raycast.h"
-#include "olylumoray/image.h"
-#include "olylumoray/rgba.h"
 
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
