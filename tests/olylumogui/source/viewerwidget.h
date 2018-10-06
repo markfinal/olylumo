@@ -30,15 +30,6 @@ public:
     EViewerType
     type() const;
 
-    void
-    set_image(
-        QImage *inImage);
-
-protected:
-    void
-    paintEvent(
-        QPaintEvent *e) override;
-
 protected:
     void
     on_frame_size_change(

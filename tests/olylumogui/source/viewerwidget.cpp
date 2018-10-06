@@ -44,6 +44,8 @@ ViewerWidget::ViewerWidget(
     layout->addWidget(this->_image_label);
 
     layout->addStretch();
+
+    this->do_ray_cast();
 }
 
 EViewerType ViewerWidget::type() const
@@ -52,28 +54,11 @@ EViewerType ViewerWidget::type() const
 }
 
 void
-ViewerWidget::set_image(
-    QImage *inImage)
-{
-    this->_image_label->setPixmap(QPixmap::fromImage(*inImage));
-    this->_image_label->adjustSize();
-    this->adjustSize();
-    this->update();
-}
-
-void
-ViewerWidget::paintEvent(
-    QPaintEvent *e)
-{
-    this->do_ray_cast();
-    QWidget::paintEvent(e);
-}
-
-void
 ViewerWidget::on_frame_size_change(
     int inNewIndex)
 {
     this->_current_frame_size_index = inNewIndex;
+    this->do_ray_cast();
 }
 
 void
@@ -94,7 +79,8 @@ ViewerWidget::do_ray_cast()
         }
     }
 
-    this->set_image(qimage);
+    this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
+    this->update();
 }
 
 } // namespace olylumogui
