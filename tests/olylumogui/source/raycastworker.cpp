@@ -5,7 +5,6 @@
 #include "olylumoray/rgba.h"
 
 #include "QtGui/QImage"
-#include "QtCore/QElapsedTimer"
 
 namespace olylumogui
 {
@@ -36,9 +35,6 @@ RayCastWorker::progress_tick() const
 void
 RayCastWorker::run()
 {
-    QElapsedTimer timer;
-    timer.start();
-
     emit this->progress_changed(0);
     auto image = olylumoray::raycast(
         this->_size.width(),
