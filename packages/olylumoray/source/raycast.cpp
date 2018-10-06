@@ -78,7 +78,8 @@ raycast(
     const uint32_t inHeight,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
-    const EMode inMode)
+    const EMode inMode,
+    std::function<void(int)> inProgressCallback)
 {
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
 
@@ -97,6 +98,8 @@ raycast(
     Vec4 camera_origin(0, 0, 0, 1); // position
 
     auto current_pixel = image->pixels();
+    auto progress = 0u;
+    inProgressCallback(progress);
     for (auto row = 0u; row < inHeight; ++row)
     {
         for (auto col = 0u; col < inWidth; ++col)
@@ -115,6 +118,7 @@ raycast(
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
                 colour += calculate_colour(ray, minT, inMaxRaysCast, inMode);
+                inProgressCallback(++progress);
             }
 
             *current_pixel = colour / static_cast<float>(inSampleCount);

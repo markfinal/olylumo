@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <functional>
 
 namespace olylumoray
 {
@@ -23,7 +24,8 @@ raycast(
     const uint32_t inHeight,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
-    const EMode inMode);
+    const EMode inMode,
+    std::function<void(int)> inProgressCallback);
 
 } // namespace olylumoray
 

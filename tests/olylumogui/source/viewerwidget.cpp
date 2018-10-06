@@ -68,15 +68,11 @@ ViewerWidget::on_max_rays_cast_changed(
 }
 
 void
-ViewerWidget::on_new_image()
+ViewerWidget::on_new_image(
+    QImage *inImage)
 {
-    auto qimage = this->_worker->result();
-    if (nullptr == qimage)
-    {
-        qDebug() << "Failed to get results from thread";
-        return;
-    }
-    this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
+    this->_image_label->setPixmap(QPixmap::fromImage(*inImage));
+    delete inImage;
     this->_progress->setVisible(false);
     this->_progress->setValue(0);
 }
@@ -97,7 +93,7 @@ ViewerWidget::do_ray_cast()
     );
     connect(
         this->_worker,
-        &QThread::finished,
+        &RayCastWorker::image_available,
         this,
         &ViewerWidget::on_new_image,
         Qt::QueuedConnection

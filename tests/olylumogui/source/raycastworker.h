@@ -29,14 +29,12 @@ public:
         const olylumoray::EMode inRenderMode
     );
 
-    QImage *
-    result() const;
-
     int
     progress_max() const;
 
 signals:
     void progress_changed(int);
+    void image_available(QImage*);
 
 protected:
     void
@@ -47,7 +45,6 @@ private:
     uint32_t          _sample_count;
     uint32_t          _max_rays_cast;
     olylumoray::EMode _render_mode;
-    QImage           *_result = nullptr;
 };
 
 } // namespace olylumogui

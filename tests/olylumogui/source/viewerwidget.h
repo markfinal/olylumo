@@ -60,7 +60,8 @@ protected:
         int inNewIndex);
 
     void
-    on_new_image();
+    on_new_image(
+        QImage *inImage);
 
 private:
     void
