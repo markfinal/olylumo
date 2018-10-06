@@ -71,6 +71,11 @@ void
 ViewerWidget::on_new_image()
 {
     auto qimage = this->_worker->result();
+    if (nullptr == qimage)
+    {
+        qDebug() << "Failed to get results from thread";
+        return;
+    }
     this->_image_label->setPixmap(QPixmap::fromImage(*qimage));
     this->_progress->setVisible(false);
     this->_progress->setValue(0);
