@@ -24,6 +24,8 @@ enum class EViewerType
     PathTrace
 };
 
+class RayCastWorker;
+
 class ViewerWidget final :
     public QWidget
 {
@@ -59,7 +61,7 @@ private:
     void
     setup_ui();
 
-    QImage *
+    void
     do_ray_cast();
 
 private:
@@ -70,7 +72,7 @@ private:
     QSpinBox               *_sample_count;
     int                     _current_frame_size_index = 0;
     olylumoray::EMode       _current_render_mode;
-    QFutureWatcher<QImage*> _ray_cast_watcher;
+    RayCastWorker          *_worker = nullptr;
 };
 
 } // namespace olylumogui
