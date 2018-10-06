@@ -29,8 +29,9 @@ public:
         const olylumoray::EMode inRenderMode
     );
 
-    int
-    progress_max() const;
+private:
+    uint32_t
+    progress_tick() const;
 
 signals:
     void progress_changed(int);
@@ -44,6 +45,7 @@ private:
     QSize             _size;
     uint32_t          _sample_count;
     uint32_t          _max_rays_cast;
+    uint32_t          _progress_tick;
     olylumoray::EMode _render_mode;
 };
 

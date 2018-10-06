@@ -79,6 +79,7 @@ raycast(
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
     const EMode inMode,
+    const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback)
 {
     std::unique_ptr<Image> image(new Image(inWidth, inHeight));
@@ -99,6 +100,7 @@ raycast(
 
     auto current_pixel = image->pixels();
     auto progress = 0u;
+    auto last_progress_tick = 0u;
     inProgressCallback(progress);
     for (auto row = 0u; row < inHeight; ++row)
     {
@@ -118,13 +120,23 @@ raycast(
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
                 colour += calculate_colour(ray, minT, inMaxRaysCast, inMode);
-                inProgressCallback(++progress);
+                ++progress;
             }
 
             *current_pixel = colour / static_cast<float>(inSampleCount);
             *current_pixel = current_pixel->gamma_correct();
             current_pixel->make_opaque();
             current_pixel++;
+        }
+
+        // calling progress updates is very expensive, so only do it
+        // when we've exceeded one % of total
+        // it's likely only to happen outside of the inner loops
+        const auto tick = progress / inProgressTick;
+        if (tick > last_progress_tick)
+        {
+            inProgressCallback(tick);
+            last_progress_tick = tick;
         }
     }
 

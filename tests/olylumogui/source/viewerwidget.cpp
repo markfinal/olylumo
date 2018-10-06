@@ -98,15 +98,17 @@ ViewerWidget::do_ray_cast()
         &ViewerWidget::on_new_image,
         Qt::QueuedConnection
     );
+#if 1
     connect(
         this->_worker,
         &RayCastWorker::progress_changed,
         this->_progress,
         &QProgressBar::setValue
     );
+#endif
     this->_progress->setVisible(true);
     this->_progress->setMinimum(0);
-    this->_progress->setMaximum(this->_worker->progress_max());
+    this->_progress->setMaximum(100);
     this->_progress->setValue(0);
     this->_worker->start();
 }

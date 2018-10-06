@@ -25,6 +25,7 @@ raycast(
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
     const EMode inMode,
+    const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback);
 
 } // namespace olylumoray
