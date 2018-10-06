@@ -10,6 +10,10 @@
 #include "QtWidgets/QToolBar"
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
+#include "QtCore/QFile"
+#include "QtXml/QDomDocument"
+
+#include <Windows.h>
 
 namespace
 {
@@ -51,6 +55,16 @@ main(
     QMainWindow window;
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
+
+    QFile scene_file(":/diffuse_sphere.xml");
+    if (!scene_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return -1;
+    }
+    QDomDocument doc;
+    doc.setContent(&scene_file);
+    scene_file.close();
+    qDebug() << doc.toString();
 
     olylumoray::HitableList world;
     world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f, new olylumoray::Lambertian({ 0.8f, 0.3f, 0.3f, 1 })));

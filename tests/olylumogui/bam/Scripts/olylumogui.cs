@@ -50,12 +50,14 @@ namespace olylumogui
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
                 this.CompileAndLinkAgainst<Qt.WidgetsFramework>(source);
+                this.CompileAndLinkAgainst<Qt.XmlFramework>(source);
                 this.LinkAgainst<Qt.GuiFramework>();
                 this.LinkAgainst<Qt.CoreFramework>();
             }
             else
             {
                 this.CompileAndLinkAgainst<Qt.Widgets>(source);
+                this.CompileAndLinkAgainst<Qt.Xml>(source);
                 this.LinkAgainst<Qt.Gui>();
                 this.LinkAgainst<Qt.Core>();
             }
