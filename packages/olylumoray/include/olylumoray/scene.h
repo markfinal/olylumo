@@ -17,6 +17,8 @@ class Scene final
 public:
     OLYLUMORAYAPI Scene();
 
+    OLYLUMORAYAPI ~Scene();
+
     Hitable *
     world() const;
 

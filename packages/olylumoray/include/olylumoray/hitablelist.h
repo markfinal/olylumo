@@ -1,13 +1,12 @@
 #ifndef OLYLUMORAY_HITABLELIST_H
 #define OLYLUMORAY_HITABLELIST_H
 
-#include "olylumoray/api.h"
 #include "olylumoray/hitable.h"
 
 namespace olylumoray
 {
 
-class OLYLUMORAYAPI HitableList :
+class HitableList :
     public Hitable
 {
 public:

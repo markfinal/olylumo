@@ -6,9 +6,6 @@
 namespace olylumoray
 {
 
-extern void
-init_random_distributions();
-
 extern float
 random_between_zero_and_one();
 

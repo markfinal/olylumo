@@ -1,7 +1,6 @@
 #ifndef OLYLUMORAY_LAMBERTIAN_H
 #define OLYLUMORAY_LAMBERTIAN_H
 
-#include "olylumoray/api.h"
 #include "olylumoray/material.h"
 #include "olylumoray/rgba.h"
 
@@ -12,7 +11,7 @@ class Lambertian final :
     public Material
 {
 public:
-    OLYLUMORAYAPI Lambertian(
+    Lambertian(
         const RGBA &inAlbedo);
 
     bool

@@ -2,10 +2,6 @@
 #include "scenewidget.h"
 #include "scenemodel.h"
 
-#include "olylumoray/hitablelist.h"
-#include "olylumoray/sphere.h"
-#include "olylumoray/lambertian.h"
-#include "olylumoray/metal.h"
 #include "olylumoray/scene.h"
 
 #include "QtWidgets/QApplication"
@@ -64,13 +60,8 @@ main(
     window.setCentralWidget(mdi);
 
     olylumoray::Scene scene;
-    olylumogui::SceneModel model(":/diffuse_sphere.xml", scene);
-
-    olylumoray::HitableList world;
-    world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f, new olylumoray::Lambertian({ 0.8f, 0.3f, 0.3f, 1 })));
-    world.append(new olylumoray::Sphere({ 0,-100.5f,-1,1 }, 100, new olylumoray::Lambertian({ 0.8f, 0.8f, 0.0f, 1 })));
-    world.append(new olylumoray::Sphere({ 1,0,-1,1 }, 0.5f, new olylumoray::Metal({ 0.8f, 0.6f, 0.2f, 1.0f }, 1)));
-    world.append(new olylumoray::Sphere({ -1,0,-1,1 }, 0.5f, new olylumoray::Metal({ 0.8f, 0.8f, 0.8f, 1.0f }, 0.3f)));
+    //olylumogui::SceneModel model(":/diffuse_sphere.xml", scene);
+    olylumogui::SceneModel model(":/metal_spheres.xml", scene);
 
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);

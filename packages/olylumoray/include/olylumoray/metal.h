@@ -1,7 +1,6 @@
 #ifndef OLYLUMORAY_METAL_H
 #define OLYLUMORAY_METAL_H
 
-#include "olylumoray/api.h"
 #include "olylumoray/material.h"
 #include "olylumoray/rgba.h"
 
@@ -12,7 +11,7 @@ class Metal final :
     public Material
 {
 public:
-    OLYLUMORAYAPI Metal(
+    Metal(
         const RGBA &inAlbedo,
         const float inRoughness);
 

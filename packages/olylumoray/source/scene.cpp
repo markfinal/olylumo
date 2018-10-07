@@ -2,6 +2,7 @@
 #include "olylumoray/hitablelist.h"
 #include "olylumoray/sphere.h"
 #include "olylumoray/lambertian.h"
+#include "olylumoray/metal.h"
 
 namespace olylumoray
 {
@@ -10,6 +11,8 @@ Scene::Scene()
 {
     this->clear();
 }
+
+Scene::~Scene() = default;
 
 Hitable *
 Scene::world() const
@@ -59,6 +62,10 @@ Scene::append_sphere(
     if ("Lambertian" == inMaterialName)
     {
         material = new Lambertian(inAlbedo);
+    }
+    else if ("Metal" == inMaterialName)
+    {
+        material = new Metal(inAlbedo, 0);
     }
 
     auto list = static_cast<HitableList*>(this->_world.get());
