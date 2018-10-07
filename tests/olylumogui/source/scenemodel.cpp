@@ -147,14 +147,34 @@ QVariant SceneModel::data(const QModelIndex & index, int role) const
     }
     auto item = static_cast<DomItem*>(index.internalPointer());
     auto node = item->_node;
+    auto node_name = node.nodeName();
+    QString id;
+    if (node.attributes().contains("id"))
+    {
+        id = node.attributes().namedItem("id").nodeValue();
+    }
+    if ("#text" == node_name)
+    {
+        return QVariant();
+    }
     switch (role)
     {
     case Qt::DisplayRole:
-        return node.nodeName();
+        {
+            if (!id.isEmpty())
+            {
+                return node_name + " (" + id + ")";
+            }
+            else
+            {
+                return node_name;
+            }
+        }
+        break;
 
     case Qt::DecorationRole:
         {
-            if ("colour" == node.nodeName())
+            if ("colour" == node_name)
             {
                 auto value = node.firstChild().nodeValue();
                 auto split = value.split(' ');
