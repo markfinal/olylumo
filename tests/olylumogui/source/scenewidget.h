@@ -6,13 +6,16 @@
 namespace olylumogui
 {
 
+class SceneModel;
+
 class SceneWidget final :
     public QTreeView
 {
     Q_OBJECT
 
 public:
-    SceneWidget();
+    SceneWidget(
+        SceneModel *inModel);
 };
 
 } // namespace olylumogui

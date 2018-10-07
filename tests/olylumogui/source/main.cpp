@@ -1,5 +1,7 @@
 #include "viewerwidget.h"
 #include "scenewidget.h"
+#include "scenemodel.h"
+
 #include "olylumoray/hitablelist.h"
 #include "olylumoray/sphere.h"
 #include "olylumoray/lambertian.h"
@@ -10,8 +12,6 @@
 #include "QtWidgets/QToolBar"
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
-#include "QtCore/QFile"
-#include "QtXml/QDomDocument"
 
 #include <Windows.h>
 
@@ -39,6 +39,8 @@ myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString
         fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
         break;
     }
+    OutputDebugString(localMsg.constData());
+    OutputDebugString("\n");
 }
 
 } // anonymous namespace
@@ -56,15 +58,7 @@ main(
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
 
-    QFile scene_file(":/diffuse_sphere.xml");
-    if (!scene_file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        return -1;
-    }
-    QDomDocument doc;
-    doc.setContent(&scene_file);
-    scene_file.close();
-    qDebug() << doc.toString();
+    olylumogui::SceneModel model(":/diffuse_sphere.xml");
 
     olylumoray::HitableList world;
     world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f, new olylumoray::Lambertian({ 0.8f, 0.3f, 0.3f, 1 })));
@@ -72,7 +66,7 @@ main(
     world.append(new olylumoray::Sphere({ 1,0,-1,1 }, 0.5f, new olylumoray::Metal({ 0.8f, 0.6f, 0.2f, 1.0f }, 1)));
     world.append(new olylumoray::Sphere({ -1,0,-1,1 }, 0.5f, new olylumoray::Metal({ 0.8f, 0.8f, 0.8f, 1.0f }, 0.3f)));
 
-    auto sceneView = new olylumogui::SceneWidget();
+    auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);
 
     auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace, &world);
