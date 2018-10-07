@@ -2,6 +2,7 @@
 #include "scenemodel.h"
 
 #include "QtGui/QMouseEvent"
+#include "QtWidgets/QHeaderView"
 
 namespace olylumogui
 {
@@ -11,6 +12,7 @@ SceneWidget::SceneWidget(
 {
     this->setWindowTitle("Scene");
     this->setModel(inModel);
+    this->header()->hide();
 }
 
 void
