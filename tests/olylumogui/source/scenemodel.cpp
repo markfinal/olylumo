@@ -2,6 +2,7 @@
 
 #include "QtCore/QFile"
 #include "QtCore/QDebug"
+#include "QtGui/QColor"
 
 namespace olylumogui
 {
@@ -144,13 +145,35 @@ QVariant SceneModel::data(const QModelIndex & index, int role) const
     {
         return QVariant();
     }
-    if (Qt::DisplayRole != role)
-    {
-        return QVariant();
-    }
     auto item = static_cast<DomItem*>(index.internalPointer());
     auto node = item->_node;
-    return node.nodeName();
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        return node.nodeName();
+
+    case Qt::DecorationRole:
+        {
+            if ("colour" == node.nodeName())
+            {
+                auto value = node.firstChild().nodeValue();
+                auto split = value.split(' ');
+                return QVariant::fromValue(
+                    QColor::fromRgbF(
+                        split[0].toFloat(),
+                        split[1].toFloat(),
+                        split[2].toFloat(),
+                        split[3].toFloat()
+                    )
+                );
+            }
+        }
+        break;
+
+    default:
+        return QVariant();
+    }
+    return QVariant();
 }
 
 } // namespace olylumogui
