@@ -61,7 +61,8 @@ main(
 
     olylumoray::Scene scene;
     //olylumogui::SceneModel model(":/diffuse_sphere.xml", scene);
-    olylumogui::SceneModel model(":/metal_spheres.xml", scene);
+    //olylumogui::SceneModel model(":/metal_spheres.xml", scene);
+    olylumogui::SceneModel model(":/rough_metal_spheres.xml", scene);
 
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);

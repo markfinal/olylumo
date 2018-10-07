@@ -41,7 +41,8 @@ public:
         const Vec4 &inPosition,
         const float inRadius,
         const std::string &inMaterialName,
-        const RGBA &inAlbedo);
+        const RGBA &inAlbedo,
+        const float inRoughness);
 
 private:
     struct EnvironmentGradient

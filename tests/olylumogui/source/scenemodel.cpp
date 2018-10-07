@@ -181,6 +181,7 @@ SceneModel::sync_to_scene(
                 float radius = 1.0f;
                 std::string material_name = "Lambertian";
                 olylumoray::RGBA albedo{ 1,1,1,1 };
+                float roughness = 0.0f;
                 auto properties = hitable.firstChild();
                 while (!properties.isNull())
                 {
@@ -212,6 +213,16 @@ SceneModel::sync_to_scene(
                                     }
                                 }
                             }
+                            else if (material_properties.nodeName() == "float")
+                            {
+                                if (material_properties.attributes().contains("id"))
+                                {
+                                    if (material_properties.attributes().namedItem("id").nodeValue() == "roughness")
+                                    {
+                                        roughness = node_to_float(material_properties);
+                                    }
+                                }
+                            }
                             material_properties = material_properties.nextSibling();
                         }
                     }
@@ -222,7 +233,8 @@ SceneModel::sync_to_scene(
                     position,
                     radius,
                     material_name,
-                    albedo
+                    albedo,
+                    roughness
                 );
             }
 

@@ -56,7 +56,8 @@ Scene::append_sphere(
     const Vec4 &inPosition,
     const float inRadius,
     const std::string &inMaterialName,
-    const RGBA &inAlbedo)
+    const RGBA &inAlbedo,
+    const float inRoughness)
 {
     Material *material = nullptr;
     if ("Lambertian" == inMaterialName)
@@ -65,7 +66,7 @@ Scene::append_sphere(
     }
     else if ("Metal" == inMaterialName)
     {
-        material = new Metal(inAlbedo, 0);
+        material = new Metal(inAlbedo, inRoughness);
     }
 
     auto list = static_cast<HitableList*>(this->_world.get());

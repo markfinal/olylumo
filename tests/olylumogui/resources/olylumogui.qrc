@@ -2,5 +2,6 @@
   <qresource>
     <file>diffuse_sphere.xml</file>
     <file>metal_spheres.xml</file>
+    <file>rough_metal_spheres.xml</file>
   </qresource>
 </RCC>
