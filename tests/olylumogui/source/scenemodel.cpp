@@ -1,5 +1,7 @@
 #include "scenemodel.h"
 
+#include "olylumoray/scene.h"
+
 #include "QtCore/QFile"
 #include "QtCore/QDebug"
 #include "QtGui/QColor"
@@ -69,6 +71,17 @@ SceneModel::SceneModel(
 }
 
 SceneModel::~SceneModel() = default;
+
+void
+SceneModel::sync_to_scene(
+    olylumoray::Scene &outScene)
+{
+    outScene.clear();
+    outScene.set_environment_gradient(
+        olylumoray::RGBA(0, 0, 0, 1),
+        olylumoray::RGBA(1, 1, 1, 1)
+    );
+}
 
 QModelIndex SceneModel::index(int row, int column, const QModelIndex & parent) const
 {

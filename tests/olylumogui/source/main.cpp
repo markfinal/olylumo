@@ -75,6 +75,7 @@ main(
     mdi->addSubWindow(sceneView);
 
     olylumoray::Scene scene;
+    model.sync_to_scene(scene);
 
     auto rayTraceViewer = new olylumogui::ViewerWidget("Ray Trace", olylumogui::EViewerType::RayTrace, &scene);
     mdi->addSubWindow(rayTraceViewer);

@@ -6,6 +6,13 @@
 
 #include <memory>
 
+namespace olylumoray
+{
+
+class Scene;
+
+} // namespace olylumoray
+
 namespace olylumogui
 {
 
@@ -21,6 +28,10 @@ public:
     SceneModel(
         const QString &inPath);
     ~SceneModel();
+
+    void
+    sync_to_scene(
+        olylumoray::Scene &outScene);
 
     // Inherited via QAbstractItemModel
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;

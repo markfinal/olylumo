@@ -4,6 +4,8 @@
 #include "olylumoray/api.h"
 #include "olylumoray/rgba.h"
 
+#include <memory>
+
 namespace olylumoray
 {
 
@@ -23,13 +25,21 @@ public:
     const RGBA &
     environment_gradient_bottom() const;
 
+    OLYLUMORAYAPI void
+    clear();
+
+    OLYLUMORAYAPI void
+    set_environment_gradient(
+        const RGBA &inTop,
+        const RGBA &inBottom);
+
 private:
     struct EnvironmentGradient
     {
         RGBA _top;
         RGBA _bottom;
     };
-    Hitable            *_world;
+    std::unique_ptr<Hitable> _world;
     EnvironmentGradient _environment;
 };
 
