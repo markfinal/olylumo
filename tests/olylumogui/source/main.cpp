@@ -9,6 +9,7 @@
 #include "QtWidgets/QToolBar"
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
+#include "QtCore/QDirIterator"
 
 #ifdef D_BAM_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -53,6 +54,11 @@ main(
 {
     qInstallMessageHandler(myMessageOutput);
 
+    QDirIterator it(":/olylumo_sample_scenes/", QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        qDebug() << it.next();
+    }
+
     QApplication app(argc, argv);
 
     QMainWindow window;
@@ -60,9 +66,9 @@ main(
     window.setCentralWidget(mdi);
 
     olylumoray::Scene scene;
-    //olylumogui::SceneModel model(":/diffuse_sphere.xml", scene);
-    //olylumogui::SceneModel model(":/metal_spheres.xml", scene);
-    olylumogui::SceneModel model(":/rough_metal_spheres.xml", scene);
+    //olylumogui::SceneModel model(":/olylumo_sample_scenes/diffuse_sphere.xml", scene);
+    olylumogui::SceneModel model(":/olylumo_sample_scenes/metal_spheres.xml", scene);
+    //olylumogui::SceneModel model(":/olylumo_sample_scenes/rough_metal_spheres.xml", scene);
 
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);
