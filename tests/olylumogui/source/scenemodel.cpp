@@ -250,7 +250,7 @@ QVariant SceneModel::data(const QModelIndex & index, int role) const
         {
             if (!id.isEmpty())
             {
-                return node_name + " (" + id + ")";
+                return id;
             }
             else
             {
