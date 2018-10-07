@@ -1,6 +1,7 @@
 using Bam.Core;
 using QtCommon.MocExtension;
 using QtCommon.RccExtension;
+using System.Linq;
 namespace olylumogui
 {
     class olylumoGUI :
@@ -112,7 +113,38 @@ namespace olylumogui
 
             this.SetDefaultMacrosAndMappings(EPublishingType.WindowedApplication);
 
-            this.Include<olylumoGUI>(C.Cxx.GUIApplication.ExecutableKey);
+            var appAnchor = this.Include<olylumoGUI>(C.Cxx.GUIApplication.ExecutableKey);
+
+            // Qt redistributable
+            var qtPlatformPlugin = this.Find<QtCommon.PlatformPlugin>().First();
+            (qtPlatformPlugin as Publisher.CollatedObject).SetPublishingDirectory("$(0)/platforms", this.PluginDir);
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+            {
+                this.IncludeFiles(
+                    this.CreateTokenizedString("$(packagedir)/resources/osx/qt.conf"),
+                    this.Macros["macOSAppBundleResourcesDir"],
+                    appAnchor);
+
+                this.IncludeFiles(
+                    this.CreateTokenizedString("$(packagedir)/resources/osx/Info.plist"),
+                    this.Macros["macOSAppBundleContentsDir"],
+                    appAnchor);
+            }
+            else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+            {
+                this.IncludeFiles(
+                    this.CreateTokenizedString("$(packagedir)/resources/linux/qt.conf"),
+                    this.ExecutableDir,
+                    appAnchor);
+            }
+            else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.IncludeFiles(
+                    this.CreateTokenizedString("$(packagedir)/resources/windows/qt.conf"),
+                    this.ExecutableDir,
+                    appAnchor);
+            }
         }
     }
 }
