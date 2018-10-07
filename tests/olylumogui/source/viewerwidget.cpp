@@ -36,6 +36,12 @@ EViewerType ViewerWidget::type() const
 }
 
 void
+ViewerWidget::refresh()
+{
+    this->do_ray_cast();
+}
+
+void
 ViewerWidget::on_frame_size_changed(
     int inNewIndex)
 {

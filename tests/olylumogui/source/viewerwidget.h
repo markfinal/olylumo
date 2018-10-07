@@ -43,6 +43,9 @@ public:
     EViewerType
     type() const;
 
+    void
+    refresh();
+
 protected:
     void
     on_frame_size_changed(

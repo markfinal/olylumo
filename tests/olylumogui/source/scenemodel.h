@@ -26,12 +26,13 @@ class SceneModel final :
 
 public:
     SceneModel(
-        const QString &inPath);
+        const QString &inPath,
+        olylumoray::Scene &inScene);
     ~SceneModel();
 
     void
-    sync_to_scene(
-        olylumoray::Scene &outScene);
+    double_click(
+        const QModelIndex &inIndex);
 
     // Inherited via QAbstractItemModel
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const override;
@@ -40,9 +41,18 @@ public:
     int columnCount(const QModelIndex & parent = QModelIndex()) const override;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
 
+signals:
+    void scene_changed();
+
+private:
+    void
+    sync_to_scene(
+        olylumoray::Scene &outScene);
+
 private:
     QDomDocument             _doc;
     std::unique_ptr<DomItem> _root;
+    olylumoray::Scene       &_scene;
 };
 
 } // namespace olylumogui

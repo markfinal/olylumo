@@ -16,6 +16,9 @@ class SceneWidget final :
 public:
     SceneWidget(
         SceneModel *inModel);
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 };
 
 } // namespace olylumogui

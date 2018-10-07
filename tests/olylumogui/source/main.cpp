@@ -63,7 +63,8 @@ main(
     auto mdi = new QMdiArea;
     window.setCentralWidget(mdi);
 
-    olylumogui::SceneModel model(":/diffuse_sphere.xml");
+    olylumoray::Scene scene;
+    olylumogui::SceneModel model(":/diffuse_sphere.xml", scene);
 
     olylumoray::HitableList world;
     world.append(new olylumoray::Sphere({ 0,0,-1,1 }, 0.5f, new olylumoray::Lambertian({ 0.8f, 0.3f, 0.3f, 1 })));
@@ -74,10 +75,13 @@ main(
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);
 
-    olylumoray::Scene scene;
-    model.sync_to_scene(scene);
-
     auto rayTraceViewer = new olylumogui::ViewerWidget("Ray Trace", olylumogui::EViewerType::RayTrace, &scene);
+    QObject::connect(
+        &model,
+        &olylumogui::SceneModel::scene_changed,
+        rayTraceViewer,
+        &olylumogui::ViewerWidget::refresh
+    );
     mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();

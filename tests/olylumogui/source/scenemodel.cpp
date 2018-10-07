@@ -5,6 +5,7 @@
 #include "QtCore/QFile"
 #include "QtCore/QDebug"
 #include "QtGui/QColor"
+#include "QtWidgets/QColorDialog"
 
 #include <cassert>
 
@@ -24,6 +25,15 @@ node_to_qcolor(
         split[2].toFloat(),
         split[3].toFloat()
     );
+}
+
+void
+set_node_value_as_colour(
+    QDomNode &inNode,
+    const QColor &inColour)
+{
+    QString colour = QString("%1 %2 %3 %4").arg(inColour.redF()).arg(inColour.greenF()).arg(inColour.blueF()).arg(inColour.alphaF());
+    inNode.firstChild().setNodeValue(colour);
 }
 
 olylumoray::RGBA
@@ -93,7 +103,10 @@ struct DomItem
 };
 
 SceneModel::SceneModel(
-    const QString &inPath)
+    const QString &inPath,
+    olylumoray::Scene &inScene)
+    :
+    _scene(inScene)
 {
     QFile scene_file(inPath);
     if (!scene_file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -105,6 +118,7 @@ SceneModel::SceneModel(
     qDebug() << this->_doc.toString();
 
     this->_root.reset(new DomItem(this->_doc, 0, nullptr));
+    this->sync_to_scene(_scene);
 }
 
 SceneModel::~SceneModel() = default;
@@ -127,6 +141,24 @@ SceneModel::sync_to_scene(
         node_to_rgba(top),
         node_to_rgba(bottom)
     );
+}
+
+void
+SceneModel::double_click(
+    const QModelIndex &inIndex)
+{
+    auto item = static_cast<DomItem*>(inIndex.internalPointer());
+    if (item->_node.nodeName() == "colour")
+    {
+        auto new_color = QColorDialog::getColor(node_to_qcolor(item->_node));
+        if (new_color.isValid())
+        {
+            set_node_value_as_colour(item->_node, new_color);
+            emit this->dataChanged(inIndex, inIndex);
+            this->sync_to_scene(this->_scene);
+            emit this->scene_changed();
+        }
+    }
 }
 
 QModelIndex SceneModel::index(int row, int column, const QModelIndex & parent) const
