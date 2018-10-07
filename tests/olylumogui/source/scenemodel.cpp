@@ -78,7 +78,7 @@ SceneModel::sync_to_scene(
 {
     outScene.clear();
     outScene.set_environment_gradient(
-        olylumoray::RGBA(0, 0, 0, 1),
+        olylumoray::RGBA(0.5f, 0.7f, 1.0f, 1.0f),
         olylumoray::RGBA(1, 1, 1, 1)
     );
 }

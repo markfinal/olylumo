@@ -1,7 +1,7 @@
 <scene>
     <environment>
         <gradient>
-            <colour id="top">0 0 0 1</colour>
+            <colour id="top">0.5 0.7 1.0 1.0</colour>
             <colour id="bottom">1 1 1 1</colour>
         </gradient>
     </environment>
