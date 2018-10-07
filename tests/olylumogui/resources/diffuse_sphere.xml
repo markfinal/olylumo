@@ -5,4 +5,13 @@
             <colour id="bottom">1 1 1 1</colour>
         </gradient>
     </environment>
+    <world>
+        <sphere>
+            <position>0 0 -1 1</position>
+            <radius>0.5</radius>
+            <material type="Lambertian">
+                <colour id="albedo">0.8 0.3 0.3 1</colour>
+            </material>
+        </sphere>
+    </world>
 </scene>
