@@ -128,23 +128,10 @@ struct DomItem
 };
 
 SceneModel::SceneModel(
-    const QString &inPath,
     olylumoray::Scene &inScene)
     :
     _scene(inScene)
-{
-    QFile scene_file(inPath);
-    if (!scene_file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        throw "Cannot open path";
-    }
-    this->_doc.setContent(&scene_file);
-    scene_file.close();
-    qDebug() << this->_doc.toString();
-
-    this->_root.reset(new DomItem(this->_doc, 0, nullptr));
-    this->sync_to_scene(_scene);
-}
+{}
 
 SceneModel::~SceneModel() = default;
 
@@ -177,10 +164,10 @@ SceneModel::sync_to_scene(
         {
             if (hitable.nodeName() == "sphere")
             {
-                olylumoray::Vec4 position{ 0,0,0,1 };
-                float radius = 1.0f;
-                std::string material_name = "Lambertian";
-                olylumoray::RGBA albedo{ 1,1,1,1 };
+                olylumoray::Vec4 position{ 0,0,-1,1 };
+                float radius = 0.5f;
+                QString material_name = "Lambertian";
+                olylumoray::RGBA albedo{ 1,0,0,1 };
                 float roughness = 0.0f;
                 auto properties = hitable.firstChild();
                 while (!properties.isNull())
@@ -197,7 +184,7 @@ SceneModel::sync_to_scene(
                     {
                         if (properties.attributes().contains("type"))
                         {
-                            material_name = properties.attributes().namedItem("type").nodeValue().toStdString();
+                            material_name = properties.attributes().namedItem("type").nodeValue();
                         }
 
                         auto material_properties = properties.firstChild();
@@ -232,7 +219,7 @@ SceneModel::sync_to_scene(
                 outScene.append_sphere(
                     position,
                     radius,
-                    material_name,
+                    material_name.toUtf8().constData(), // get stack corruption using toStdString() here
                     albedo,
                     roughness
                 );
@@ -241,6 +228,27 @@ SceneModel::sync_to_scene(
             hitable = hitable.nextSibling();
         }
     }
+
+    emit this->scene_changed();
+}
+
+void
+SceneModel::load(
+    const QString &inPath)
+{
+    QFile scene_file(inPath);
+    if (!scene_file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        throw "Cannot open path";
+    }
+    this->_doc.setContent(&scene_file);
+    scene_file.close();
+    qDebug() << this->_doc.toString();
+
+    this->beginResetModel();
+    this->_root.reset(new DomItem(this->_doc, 0, nullptr));
+    this->endResetModel();
+    this->sync_to_scene(_scene);
 }
 
 void
@@ -321,7 +329,11 @@ int SceneModel::rowCount(const QModelIndex & parent) const
         parentItem = static_cast<DomItem*>(parent.internalPointer());
     }
 
-    return parentItem->_node.childNodes().count();
+    if (nullptr != parentItem)
+    {
+        return parentItem->_node.childNodes().count();
+    }
+    return 0;
 }
 
 int SceneModel::columnCount(const QModelIndex & parent) const

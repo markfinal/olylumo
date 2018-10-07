@@ -10,6 +10,8 @@
 #include "QtWidgets/QMdiArea"
 #include "QtWidgets/QLabel"
 #include "QtCore/QDirIterator"
+#include "QtWidgets/QMenuBar"
+#include "QtWidgets/QMenu"
 
 #ifdef D_BAM_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -54,11 +56,6 @@ main(
 {
     qInstallMessageHandler(myMessageOutput);
 
-    QDirIterator it(":/olylumo_sample_scenes/", QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        qDebug() << it.next();
-    }
-
     QApplication app(argc, argv);
 
     QMainWindow window;
@@ -66,9 +63,28 @@ main(
     window.setCentralWidget(mdi);
 
     olylumoray::Scene scene;
-    //olylumogui::SceneModel model(":/olylumo_sample_scenes/diffuse_sphere.xml", scene);
-    olylumogui::SceneModel model(":/olylumo_sample_scenes/metal_spheres.xml", scene);
-    //olylumogui::SceneModel model(":/olylumo_sample_scenes/rough_metal_spheres.xml", scene);
+    olylumogui::SceneModel model(scene);
+
+    QMenuBar menu_bar;
+    window.setMenuBar(&menu_bar);
+
+    auto file_menu = menu_bar.addMenu("File");
+    auto load_menu = file_menu->addMenu("Load");
+    auto sample_menu = load_menu->addMenu("Samples");
+    QDirIterator it(":/olylumo_sample_scenes/", QDirIterator::Subdirectories);
+    while (it.hasNext())
+    {
+        const auto path = it.next();
+        auto sample = sample_menu->addAction(path);
+        QObject::connect(
+            sample,
+            &QAction::triggered,
+            [&model, path]()
+            {
+                model.load(path);
+            }
+        );
+    }
 
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);

@@ -11,7 +11,6 @@ SceneWidget::SceneWidget(
 {
     this->setWindowTitle("Scene");
     this->setModel(inModel);
-    this->expandAll();
 }
 
 void

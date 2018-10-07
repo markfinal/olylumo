@@ -26,9 +26,12 @@ class SceneModel final :
 
 public:
     SceneModel(
-        const QString &inPath,
         olylumoray::Scene &inScene);
     ~SceneModel();
+
+    void
+    load(
+        const QString &inPath);
 
     void
     double_click(

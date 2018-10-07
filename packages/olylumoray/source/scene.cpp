@@ -37,7 +37,7 @@ Scene::clear()
 {
     this->_world.reset(new HitableList);
     this->set_environment_gradient(
-        RGBA(0.5f, 0.7f, 1.0f, 1.0f),
+        RGBA(0, 0, 0, 1),
         RGBA(1, 1, 1, 1)
     );
 }
