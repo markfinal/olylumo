@@ -14,7 +14,7 @@ class QProgressBar;
 namespace olylumoray
 {
     enum class EMode;
-    class Hitable;
+    class Scene;
 } // namespace olylumoray
 
 namespace olylumogui
@@ -35,10 +35,9 @@ class ViewerWidget final :
 
 public:
     ViewerWidget(
-        QMdiArea *inParent,
         const QString &inTitle,
         const EViewerType inType,
-        olylumoray::Hitable *inWorld
+        olylumoray::Scene *inScene
     );
 
     EViewerType
@@ -75,7 +74,7 @@ private:
 
 private:
     EViewerType             _type;
-    olylumoray::Hitable    *_world;
+    olylumoray::Scene      *_scene;
     QLabel                 *_image_label;
     QComboBox              *_frame_size;
     QComboBox              *_render_mode;

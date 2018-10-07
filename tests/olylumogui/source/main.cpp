@@ -6,6 +6,7 @@
 #include "olylumoray/sphere.h"
 #include "olylumoray/lambertian.h"
 #include "olylumoray/metal.h"
+#include "olylumoray/scene.h"
 
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMainWindow"
@@ -69,7 +70,9 @@ main(
     auto sceneView = new olylumogui::SceneWidget(&model);
     mdi->addSubWindow(sceneView);
 
-    auto rayTraceViewer = new olylumogui::ViewerWidget(mdi, "Ray Trace", olylumogui::EViewerType::RayTrace, &world);
+    olylumoray::Scene scene;
+
+    auto rayTraceViewer = new olylumogui::ViewerWidget("Ray Trace", olylumogui::EViewerType::RayTrace, &scene);
     mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();

@@ -5,9 +5,9 @@
 #include "olylumoray/ray.h"
 #include "olylumoray/sphere.h"
 #include "olylumoray/hitrecord.h"
-#include "olylumoray/hitablelist.h"
 #include "olylumoray/material.h"
 #include "olylumoray/utils.h"
+#include "olylumoray/scene.h"
 
 #include <limits>
 
@@ -16,14 +16,15 @@ namespace olylumoray
 
 RGBA
 calculate_colour(
-    Hitable *inWorld,
+    Scene *inScene,
     const Ray &inRay,
     const float inMinT, // near plane
     const uint32_t inMaxRaysCast,
     const EMode inMode)
 {
+    auto world = inScene->world();
     HitRecord record;
-    if ((inMaxRaysCast > 0) && inWorld->hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
+    if ((inMaxRaysCast > 0) && (nullptr != world) && world->hit(inRay, inMinT, std::numeric_limits<float>::max(), record))
     {
         switch (inMode)
         {
@@ -33,7 +34,7 @@ calculate_colour(
             RGBA attenuation;
             if (record._material->scatter(inRay, record, attenuation, scattered))
             {
-                return attenuation * calculate_colour(inWorld, scattered, inMinT, inMaxRaysCast - 1, inMode);
+                return attenuation * calculate_colour(inScene, scattered, inMinT, inMaxRaysCast - 1, inMode);
             }
             else
             {
@@ -48,13 +49,13 @@ calculate_colour(
     }
     const auto unit = inRay.direction().normalise();
     const auto background_t = 0.5f * (unit.y() + 1); // rescale [-1,1] to [0,1]
-    const auto lerp = RGBA(1, 1, 1, 1) * (1.0f - background_t) + RGBA(0.5f, 0.7f, 1.0f, 1.0f) * background_t;
+    const auto lerp = inScene->environment_gradient_bottom() * (1.0f - background_t) + inScene->environment_gradient_top() * background_t;
     return lerp;
 }
 
 std::unique_ptr<Image>
 raycast(
-    Hitable *inWorld,
+    Scene *inScene,
     const uint32_t inWidth,
     const uint32_t inHeight,
     const uint32_t inSampleCount,
@@ -105,7 +106,7 @@ raycast(
                 );
                 const auto minT = 0.0001f;
                 //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
-                colour += calculate_colour(inWorld, ray, minT, inMaxRaysCast, inMode);
+                colour += calculate_colour(inScene, ray, minT, inMaxRaysCast, inMode);
                 ++progress;
             }
 

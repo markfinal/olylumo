@@ -10,14 +10,14 @@ namespace olylumogui
 {
 
 RayCastWorker::RayCastWorker(
-    olylumoray::Hitable *inWorld,
+    olylumoray::Scene *inScene,
     const QSize inSize,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
     const olylumoray::EMode inRenderMode
 )
     :
-    _world(inWorld),
+    _scene(inScene),
     _size(inSize),
     _sample_count(inSampleCount),
     _max_rays_cast(inMaxRaysCast),
@@ -45,7 +45,7 @@ RayCastWorker::run()
 {
     emit this->progress_changed(0);
     auto image = olylumoray::raycast(
-        this->_world,
+        this->_scene,
         this->_size.width(),
         this->_size.height(),
         this->_sample_count,
