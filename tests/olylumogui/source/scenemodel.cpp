@@ -248,6 +248,7 @@ SceneModel::load(
     this->beginResetModel();
     this->_root.reset(new DomItem(this->_doc, 0, nullptr));
     this->endResetModel();
+    emit this->scene_loaded();
     this->sync_to_scene(_scene);
 }
 

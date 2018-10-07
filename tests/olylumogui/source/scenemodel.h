@@ -45,6 +45,7 @@ public:
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
 
 signals:
+    void scene_loaded();
     void scene_changed();
 
 private:

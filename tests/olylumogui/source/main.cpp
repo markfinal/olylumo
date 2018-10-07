@@ -103,6 +103,12 @@ main(
     window.addDockWidget(Qt::RightDockWidgetArea, dock_widget);
 
     auto sceneView = new olylumogui::SceneWidget(&model);
+    QObject::connect(
+        &model,
+        &olylumogui::SceneModel::scene_loaded,
+        sceneView,
+        &olylumogui::SceneWidget::expandAll
+    );
     dock_widget->setWidget(sceneView);
 
     window.showMaximized();
