@@ -12,6 +12,7 @@
 #include "QtCore/QDirIterator"
 #include "QtWidgets/QMenuBar"
 #include "QtWidgets/QMenu"
+#include "QtWidgets/QDockWidget"
 
 #ifdef D_BAM_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -86,9 +87,6 @@ main(
         );
     }
 
-    auto sceneView = new olylumogui::SceneWidget(&model);
-    mdi->addSubWindow(sceneView);
-
     auto rayTraceViewer = new olylumogui::ViewerWidget("Ray Trace", olylumogui::EViewerType::RayTrace, &scene);
     QObject::connect(
         &model,
@@ -99,6 +97,13 @@ main(
     mdi->addSubWindow(rayTraceViewer);
     ///*auto pathTraceViewer = */new olylumogui::ViewerWidget(mdi, "Path Trace", olylumogui::EViewerType::PathTrace);
     mdi->tileSubWindows();
+
+    auto dock_widget = new QDockWidget;
+    dock_widget->setAllowedAreas(Qt::RightDockWidgetArea);
+    window.addDockWidget(Qt::RightDockWidgetArea, dock_widget);
+
+    auto sceneView = new olylumogui::SceneWidget(&model);
+    dock_widget->setWidget(sceneView);
 
     window.showMaximized();
     auto result = app.exec();
