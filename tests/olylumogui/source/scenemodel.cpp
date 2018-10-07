@@ -6,6 +6,43 @@
 #include "QtCore/QDebug"
 #include "QtGui/QColor"
 
+#include <cassert>
+
+namespace
+{
+
+QColor
+node_to_qcolor(
+    const QDomNode &inNode)
+{
+    auto value = inNode.firstChild().nodeValue();
+    auto split = value.split(' ');
+    assert(4 == split.length());
+    return QColor::fromRgbF(
+        split[0].toFloat(),
+        split[1].toFloat(),
+        split[2].toFloat(),
+        split[3].toFloat()
+    );
+}
+
+olylumoray::RGBA
+node_to_rgba(
+    const QDomNode &inNode)
+{
+    auto value = inNode.firstChild().nodeValue();
+    auto split = value.split(' ');
+    assert(4 == split.length());
+    return olylumoray::RGBA(
+        split[0].toFloat(),
+        split[1].toFloat(),
+        split[2].toFloat(),
+        split[3].toFloat()
+    );
+}
+
+} // anonymous namespace
+
 namespace olylumogui
 {
 
@@ -77,9 +114,18 @@ SceneModel::sync_to_scene(
     olylumoray::Scene &outScene)
 {
     outScene.clear();
+
+    auto scene = this->_doc.firstChild();
+    auto environment = scene.firstChild();
+    auto gradient = environment.firstChild();
+    auto top = gradient.firstChild();
+    assert(top.attributes().contains("id") && top.attributes().namedItem("id").nodeValue() == "top");
+    auto bottom = top.nextSibling();
+    assert(bottom.attributes().contains("id") && bottom.attributes().namedItem("id").nodeValue() == "bottom");
+
     outScene.set_environment_gradient(
-        olylumoray::RGBA(0.5f, 0.7f, 1.0f, 1.0f),
-        olylumoray::RGBA(1, 1, 1, 1)
+        node_to_rgba(top),
+        node_to_rgba(bottom)
     );
 }
 
@@ -189,16 +235,7 @@ QVariant SceneModel::data(const QModelIndex & index, int role) const
         {
             if ("colour" == node_name)
             {
-                auto value = node.firstChild().nodeValue();
-                auto split = value.split(' ');
-                return QVariant::fromValue(
-                    QColor::fromRgbF(
-                        split[0].toFloat(),
-                        split[1].toFloat(),
-                        split[2].toFloat(),
-                        split[3].toFloat()
-                    )
-                );
+                return QVariant::fromValue(node_to_qcolor(node));
             }
         }
         break;
