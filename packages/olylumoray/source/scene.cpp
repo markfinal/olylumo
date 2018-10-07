@@ -1,5 +1,7 @@
 #include "olylumoray/scene.h"
 #include "olylumoray/hitablelist.h"
+#include "olylumoray/sphere.h"
+#include "olylumoray/lambertian.h"
 
 namespace olylumoray
 {
@@ -44,6 +46,27 @@ Scene::set_environment_gradient(
 {
     this->_environment._top = inTop;
     this->_environment._bottom = inBottom;
+}
+
+void
+Scene::append_sphere(
+    const Vec4 &inPosition,
+    const float inRadius,
+    const std::string &inMaterialName,
+    const RGBA &inAlbedo)
+{
+    Material *material = nullptr;
+    if ("Lambertian" == inMaterialName)
+    {
+        material = new Lambertian(inAlbedo);
+    }
+
+    auto list = static_cast<HitableList*>(this->_world.get());
+    list->append(new Sphere(
+        inPosition,
+        inRadius,
+        material
+    ));
 }
 
 } // namespace olylumoray

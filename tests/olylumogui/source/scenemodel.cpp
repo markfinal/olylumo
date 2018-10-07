@@ -1,6 +1,8 @@
 #include "scenemodel.h"
 
 #include "olylumoray/scene.h"
+#include "olylumoray/vec4.h"
+#include "olylumoray/rgba.h"
 
 #include "QtCore/QFile"
 #include "QtCore/QDebug"
@@ -49,6 +51,29 @@ node_to_rgba(
         split[2].toFloat(),
         split[3].toFloat()
     );
+}
+
+olylumoray::Vec4
+node_to_vec4(
+    const QDomNode &inNode)
+{
+    auto value = inNode.firstChild().nodeValue();
+    auto split = value.split(' ');
+    assert(4 == split.length());
+    return olylumoray::Vec4(
+        split[0].toFloat(),
+        split[1].toFloat(),
+        split[2].toFloat(),
+        split[3].toFloat()
+    );
+}
+
+float
+node_to_float(
+    const QDomNode &inNode)
+{
+    auto value = inNode.firstChild().nodeValue();
+    return value.toFloat();
 }
 
 } // anonymous namespace
@@ -131,16 +156,79 @@ SceneModel::sync_to_scene(
 
     auto scene = this->_doc.firstChild();
     auto environment = scene.firstChild();
-    auto gradient = environment.firstChild();
-    auto top = gradient.firstChild();
-    assert(top.attributes().contains("id") && top.attributes().namedItem("id").nodeValue() == "top");
-    auto bottom = top.nextSibling();
-    assert(bottom.attributes().contains("id") && bottom.attributes().namedItem("id").nodeValue() == "bottom");
 
-    outScene.set_environment_gradient(
-        node_to_rgba(top),
-        node_to_rgba(bottom)
-    );
+    {
+        auto gradient = environment.firstChild();
+        auto top = gradient.firstChild();
+        assert(top.attributes().contains("id") && top.attributes().namedItem("id").nodeValue() == "top");
+        auto bottom = top.nextSibling();
+        assert(bottom.attributes().contains("id") && bottom.attributes().namedItem("id").nodeValue() == "bottom");
+
+        outScene.set_environment_gradient(
+            node_to_rgba(top),
+            node_to_rgba(bottom)
+        );
+    }
+
+    {
+        auto world = environment.nextSibling();
+        auto hitable = world.firstChild();
+        while (!hitable.isNull())
+        {
+            if (hitable.nodeName() == "sphere")
+            {
+                olylumoray::Vec4 position{ 0,0,0,1 };
+                float radius = 1.0f;
+                std::string material_name = "Lambertian";
+                olylumoray::RGBA albedo{ 1,1,1,1 };
+                auto properties = hitable.firstChild();
+                while (!properties.isNull())
+                {
+                    if (properties.nodeName() == "position")
+                    {
+                        position = node_to_vec4(properties);
+                    }
+                    else if (properties.nodeName() == "radius")
+                    {
+                        radius = node_to_float(properties);
+                    }
+                    else if (properties.nodeName() == "material")
+                    {
+                        if (properties.attributes().contains("type"))
+                        {
+                            material_name = properties.attributes().namedItem("type").nodeValue().toStdString();
+                        }
+
+                        auto material_properties = properties.firstChild();
+                        while (!material_properties.isNull())
+                        {
+                            if (material_properties.nodeName() == "colour")
+                            {
+                                if (material_properties.attributes().contains("id"))
+                                {
+                                    if (material_properties.attributes().namedItem("id").nodeValue() == "albedo")
+                                    {
+                                        albedo = node_to_rgba(material_properties);
+                                    }
+                                }
+                            }
+                            material_properties = material_properties.nextSibling();
+                        }
+                    }
+                    properties = properties.nextSibling();
+                }
+
+                outScene.append_sphere(
+                    position,
+                    radius,
+                    material_name,
+                    albedo
+                );
+            }
+
+            hitable = hitable.nextSibling();
+        }
+    }
 }
 
 void

@@ -5,6 +5,7 @@
 #include "olylumoray/rgba.h"
 
 #include <memory>
+#include <string>
 
 namespace olylumoray
 {
@@ -32,6 +33,13 @@ public:
     set_environment_gradient(
         const RGBA &inTop,
         const RGBA &inBottom);
+
+    OLYLUMORAYAPI void
+    append_sphere(
+        const Vec4 &inPosition,
+        const float inRadius,
+        const std::string &inMaterialName,
+        const RGBA &inAlbedo);
 
 private:
     struct EnvironmentGradient
