@@ -11,6 +11,7 @@ namespace olylumogui
 
 struct DomItem;
 
+// based on http://doc.qt.io/qt-5/qtwidgets-itemviews-simpledommodel-example.html
 class SceneModel final :
     public QAbstractItemModel
 {
