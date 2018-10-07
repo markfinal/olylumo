@@ -30,6 +30,7 @@ namespace olylumogui
             {
                 if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
                 {
+                    cxxCompiler.ExceptionHandler = C.Cxx.EExceptionHandler.Asynchronous;
                     cxxCompiler.EnableRunTimeTypeInfo = false;
                     cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
                     cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
