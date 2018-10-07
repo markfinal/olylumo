@@ -244,10 +244,6 @@ QVariant SceneModel::data(const QModelIndex & index, int role) const
     {
         id = node.attributes().namedItem("id").nodeValue();
     }
-    if ("#text" == node_name)
-    {
-        return QVariant();
-    }
     switch (role)
     {
     case Qt::DisplayRole:
