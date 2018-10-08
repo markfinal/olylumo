@@ -33,6 +33,13 @@ namespace olylumoray
                     clangCompiler.ExtraWarnings = true;
                     clangCompiler.Pedantic = true;
                 }
+                else if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                {
+                    gccCompiler.AllWarnings = true;
+                    gccCompiler.ExtraWarnings = true;
+                    gccCompiler.Pedantic = true;
+                    gccCompiler.PositionIndependentCode = true;
+                }
             });
 
             this.PublicPatch((settings, appliedTo) =>

@@ -47,6 +47,13 @@ namespace olylumogui
                     clangCompiler.ExtraWarnings = true;
                     clangCompiler.Pedantic = true;
                 }
+                else if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                {
+                    gccCompiler.AllWarnings = true;
+                    gccCompiler.ExtraWarnings = true;
+                    gccCompiler.Pedantic = true;
+                    gccCompiler.PositionIndependentCode = true; // due to Qt
+                }
             });
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
@@ -74,6 +81,11 @@ namespace olylumogui
                 else if (settings is ClangCommon.ICommonLinkerSettings clangLinker)
                 {
                     clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
+                }
+                else if (settings is GccCommon.ICommonLinkerSettings gccLinker)
+                {
+                    gccLinker.CanUseOrigin = true;
+                    gccLinker.RPath.AddUnique("$ORIGIN/../lib");
                 }
             });
 
