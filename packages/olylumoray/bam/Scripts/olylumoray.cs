@@ -1,4 +1,3 @@
-using Bam.Core;
 namespace olylumoray
 {
     class RayTrace :
@@ -6,7 +5,7 @@ namespace olylumoray
     {
         protected override void
         Init(
-            Module parent)
+            Bam.Core.Module parent)
         {
             base.Init(parent);
 

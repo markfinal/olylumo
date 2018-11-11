@@ -4,10 +4,12 @@ using QtCommon.RccExtension;
 using System.Linq;
 namespace olylumogui
 {
-    class olylumoGUI :
+    class OlylumoGUI :
         C.Cxx.GUIApplication
     {
-        protected override void Init(Module parent)
+        protected override void
+        Init(
+            Bam.Core.Module parent)
         {
             base.Init(parent);
 
@@ -105,8 +107,7 @@ namespace olylumogui
                     else
                     {
                         throw new Bam.Core.Exception(
-                            "Unsupported runtime library, {0}",
-                            vcCompiler.RuntimeLibrary.ToString()
+                            $"Unsupported runtime library, {vcCompiler.RuntimeLibrary.ToString()}"
                         );
                     }
                 }
@@ -114,7 +115,7 @@ namespace olylumogui
         }
     }
 
-    sealed class olylumoGUIRuntime :
+    sealed class OlylumoGUIRuntime :
         Publisher.Collation
     {
         protected override void
@@ -125,7 +126,7 @@ namespace olylumogui
 
             this.SetDefaultMacrosAndMappings(EPublishingType.WindowedApplication);
 
-            var appAnchor = this.Include<olylumoGUI>(C.Cxx.GUIApplication.ExecutableKey);
+            var appAnchor = this.Include<OlylumoGUI>(C.Cxx.GUIApplication.ExecutableKey);
 
             // Qt redistributable
             var qtPlatformPlugin = this.Find<QtCommon.PlatformPlugin>().First();
