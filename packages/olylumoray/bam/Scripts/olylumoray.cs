@@ -48,6 +48,12 @@ namespace olylumoray
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/include"));
                 }
             });
+
+            this.PrivatePatch(settings =>
+            {
+                var cxxLinker = settings as C.ICxxOnlyLinkerSettings;
+                cxxLinker.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
+            });
         }
     }
 }
