@@ -32,7 +32,7 @@ ImageResultWidget::queue_image_tile(
     const uint32_t inY,
     QImage *inTile)
 {
-    this->_image_queue.emplace_back(inX, inY, std::move(inTile));
+    this->_image_queue.emplace_back(QRect(inX, inY, inTile->width(), inTile->height()), std::move(inTile));
     this->repaint();
 }
 
@@ -45,8 +45,7 @@ ImageResultWidget::paintEvent(
     painter.fillRect(this->rect(), Qt::red); // marking the non-updated region
     for (const auto &tile : this->_image_queue)
     {
-        QRect rect(tile._x, tile._y, tile._tile->width(), tile._tile->height());
-        painter.drawImage(rect, *tile._tile);
+        painter.drawImage(tile._region, *tile._tile);
     }
 }
 

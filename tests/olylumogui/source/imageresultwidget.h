@@ -41,14 +41,12 @@ public:
     QSize _frame_size;
     struct Data
     {
-        uint32_t _x;
-        uint32_t _y;
+        QRect _region;
         QImage *_tile;
 
-        Data(const uint32_t inX, const uint32_t inY, QImage *inTile)
+        Data(const QRect &inRegion, QImage *inTile)
             :
-            _x(inX),
-            _y(inY),
+            _region(inRegion),
             _tile(inTile)
         {}
     };
