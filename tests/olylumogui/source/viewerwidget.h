@@ -68,7 +68,9 @@ protected:
         int inNewValue);
 
     void
-    on_new_image(
+    on_new_tile(
+        const uint32_t inX,
+        const uint32_t inY,
         QImage *inImage);
 
 private:

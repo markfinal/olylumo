@@ -3,6 +3,8 @@
 
 #include "QtWidgets/QWidget"
 
+#include <list>
+
 namespace olylumogui
 {
 
@@ -15,12 +17,17 @@ public:
     ImageResultWidget();
 
     void
+    clear();
+
+    void
     update_frame_size(
         const QSize &inNewSize);
 
     void
-    update_image(
-        QImage *inImage);
+    queue_image_tile(
+        const uint32_t inX,
+        const uint32_t inY,
+        QImage *inTile);
 
 protected:
     void
@@ -32,7 +39,20 @@ protected:
 
 public:
     QSize _frame_size;
-    QImage *_image = nullptr;
+    struct Data
+    {
+        uint32_t _x;
+        uint32_t _y;
+        QImage *_tile;
+
+        Data(const uint32_t inX, const uint32_t inY, QImage *inTile)
+            :
+            _x(inX),
+            _y(inY),
+            _tile(inTile)
+        {}
+    };
+    std::list<Data> _image_queue;
 };
 
 } // namespace olylumogui

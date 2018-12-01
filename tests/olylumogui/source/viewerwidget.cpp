@@ -85,12 +85,12 @@ ViewerWidget::on_tile_count_changed(
 }
 
 void
-ViewerWidget::on_new_image(
-    QImage *inImage)
+ViewerWidget::on_new_tile(
+    const uint32_t inX,
+    const uint32_t inY,
+    QImage *inTile)
 {
-    this->_image_widget->update_image(inImage);
-    this->_progress->setVisible(false);
-    this->_progress->setValue(0);
+    this->_image_widget->queue_image_tile(inX, inY, std::move(inTile));
 }
 
 void
@@ -122,15 +122,25 @@ ViewerWidget::do_ray_cast()
     );
     connect(
         this->_worker,
-        &RayCastWorker::image_available,
+        &RayCastWorker::complete,
+        [this]()
+        {
+            this->_progress->setVisible(false);
+            this->_progress->setValue(0);
+        }
+    );
+    connect(
+        this->_worker,
+        &RayCastWorker::tile_available,
         this,
-        &ViewerWidget::on_new_image,
+        &ViewerWidget::on_new_tile,
         Qt::QueuedConnection
     );
     this->_progress->setVisible(true);
     this->_progress->setMinimum(0);
     this->_progress->setMaximum(100);
     this->_progress->setValue(0);
+    this->_image_widget->clear();
     this->_worker->start();
 }
 

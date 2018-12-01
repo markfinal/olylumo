@@ -65,6 +65,7 @@ raycast(
     const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback,
     std::function<void(uint32_t, uint32_t, std::unique_ptr<Image>)> inTileCompleteCallback,
+    std::function<void(void)> inCompleteCallback,
     bool *inAbortState)
 {
     // use right-handed coordinate system:
@@ -150,7 +151,7 @@ raycast(
         }
     }
 
-    return;
+    inCompleteCallback();
 }
 
 } // namespace olylumoray

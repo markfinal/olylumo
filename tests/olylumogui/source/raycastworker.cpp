@@ -87,6 +87,10 @@ RayCastWorker::run()
             emit this->progress_changed(inProgress);
         },
         std::bind(&RayCastWorker::tile_complete, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+        [this]()
+        {
+            emit this->complete();
+        },
         &this->_abort
     );
 }

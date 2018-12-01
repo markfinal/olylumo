@@ -48,8 +48,8 @@ private:
 
 signals:
     void progress_changed(int);
-    void image_available(QImage*);
-    void tile_available(uint32_t, uint32_t, QImage*);
+    void tile_available(int, int, QImage*);
+    void complete();
 
 protected:
     void

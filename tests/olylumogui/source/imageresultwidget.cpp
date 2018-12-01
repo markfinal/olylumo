@@ -13,6 +13,12 @@ ImageResultWidget::ImageResultWidget()
 }
 
 void
+ImageResultWidget::clear()
+{
+    this->_image_queue.clear();
+}
+
+void
 ImageResultWidget::update_frame_size(
     const QSize &inNewSize)
 {
@@ -21,15 +27,12 @@ ImageResultWidget::update_frame_size(
 }
 
 void
-ImageResultWidget::update_image(
-    QImage *inImage)
+ImageResultWidget::queue_image_tile(
+    const uint32_t inX,
+    const uint32_t inY,
+    QImage *inTile)
 {
-    if (nullptr != this->_image)
-    {
-        delete this->_image;
-    }
-    this->_image = inImage;
-    this->repaint();
+    this->_image_queue.emplace_back(inX, inY, std::move(inTile));
 }
 
 void
@@ -39,9 +42,10 @@ ImageResultWidget::paintEvent(
     QWidget::paintEvent(inEvent);
     QPainter painter(this);
     painter.fillRect(this->rect(), Qt::red); // marking the non-updated region
-    if (nullptr != this->_image)
+    for (const auto &tile : this->_image_queue)
     {
-        painter.drawImage(this->_image->rect(), *this->_image);
+        QRect rect(tile._x, tile._y, tile._tile->width(), tile._tile->height());
+        painter.drawImage(rect, *tile._tile);
     }
 }
 
