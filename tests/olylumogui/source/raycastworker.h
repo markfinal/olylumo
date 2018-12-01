@@ -10,6 +10,7 @@ namespace olylumoray
 {
     enum class EMode;
     class Scene;
+    class Image;
 } // namespace olylumoray
 
 class QImage;
@@ -39,9 +40,16 @@ private:
     uint32_t
     progress_tick() const;
 
+    void
+    tile_complete(
+        const uint32_t inX,
+        const uint32_t inY,
+        std::unique_ptr<olylumoray::Image> inTile);
+
 signals:
     void progress_changed(int);
     void image_available(QImage*);
+    void tile_available(uint32_t, uint32_t, QImage*);
 
 protected:
     void

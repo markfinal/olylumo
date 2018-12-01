@@ -43,10 +43,37 @@ RayCastWorker::progress_tick() const
 }
 
 void
+RayCastWorker::tile_complete(
+    const uint32_t inX,
+    const uint32_t inY,
+    std::unique_ptr<olylumoray::Image> inTile)
+{
+    // ignoring scanline convertion to bytes in the progress
+    auto qimage = new QImage(inTile->width(), inTile->height(), QImage::Format_RGBA8888);
+    auto src = inTile->pixels();
+    for (auto row = 0u; row < inTile->height(); ++row)
+    {
+        if (this->_abort)
+        {
+            return;
+        }
+        auto dst = qimage->scanLine(row);
+        for (auto col = 0u; col < inTile->width(); ++col)
+        {
+            src->convert_to_bytes(dst);
+            ++src;
+            dst += 4;
+        }
+    }
+
+    emit this->tile_available(inX, inY, qimage);
+}
+
+void
 RayCastWorker::run()
 {
     emit this->progress_changed(0);
-    auto image = olylumoray::raycast(
+    olylumoray::raycast(
         this->_scene,
         this->_size.width(),
         this->_size.height(),
@@ -59,37 +86,9 @@ RayCastWorker::run()
         {
             emit this->progress_changed(inProgress);
         },
+        std::bind(&RayCastWorker::tile_complete, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
         &this->_abort
     );
-
-    if (this->_abort)
-    {
-        return;
-    }
-
-    // ignoring scanline convertion to bytes in the progress
-    auto qimage = new QImage(image->width(), image->height(), QImage::Format_RGBA8888);
-    auto src = image->pixels();
-    for (auto row = 0u; row < image->height(); ++row)
-    {
-        if (this->_abort)
-        {
-            return;
-        }
-        auto dst = qimage->scanLine(row);
-        for (auto col = 0u; col < image->width(); ++col)
-        {
-            src->convert_to_bytes(dst);
-            ++src;
-            dst += 4;
-        }
-    }
-
-    if (this->_abort)
-    {
-        return;
-    }
-    emit this->image_available(qimage);
 }
 
 } // namespace olylumogui

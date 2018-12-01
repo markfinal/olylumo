@@ -53,7 +53,7 @@ calculate_colour(
     return lerp;
 }
 
-std::unique_ptr<Image>
+void
 raycast(
     Scene *inScene,
     const uint32_t inWidth,
@@ -64,10 +64,9 @@ raycast(
     const EMode inMode,
     const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback,
+    std::function<void(uint32_t, uint32_t, std::unique_ptr<Image>)> inTileCompleteCallback,
     bool *inAbortState)
 {
-    std::unique_ptr<Image> image(new Image(inWidth, inHeight));
-
     // use right-handed coordinate system:
     // right   -> +x
     // up      -> +y
@@ -82,26 +81,31 @@ raycast(
     Vec4 camera_image_plane_vertical(0, 2.0f, 0, 0.0f); // direction
     Vec4 camera_origin(0, 0, 0, 1); // position
 
-    auto current_pixel = image->pixels();
     auto progress = 0u;
     auto last_progress_tick = 0u;
     inProgressCallback(progress);
 
     const auto tile_width = inWidth / inTileCount;
+    assert(tile_width * inTileCount == inWidth);
     const auto tile_height = inHeight / inTileCount;
+    assert(tile_height * inTileCount == inHeight);
     for (auto row = 0u; row < inTileCount; ++row)
     {
-        auto y = row * tile_height;
-        for (auto tile_y = 0u; tile_y < tile_height; ++tile_y, ++y)
+        for (auto col = 0u; col < inTileCount; ++col)
         {
-            for (auto col = 0u; col < inTileCount; ++col)
+            // new tile
+            std::unique_ptr<Image> image(new Image(tile_width, tile_height));
+            auto current_pixel = image->pixels();
+
+            auto y = row * tile_height;
+            for (auto tile_y = 0u; tile_y < tile_height; ++tile_y, ++y)
             {
                 auto x = col * tile_width;
                 for (auto tile_x = 0u; tile_x < tile_width; ++tile_x, ++x)
                 {
                     if (nullptr != inAbortState && *inAbortState)
                     {
-                        return nullptr;
+                        return;
                     }
 
                     RGBA colour;
@@ -137,10 +141,16 @@ raycast(
                 inProgressCallback(tick);
                 last_progress_tick = tick;
             }
+
+            inTileCompleteCallback(
+                col * tile_width,
+                row * tile_height,
+                std::move(image)
+            );
         }
     }
 
-    return image;
+    return;
 }
 
 } // namespace olylumoray
