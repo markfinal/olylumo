@@ -33,6 +33,7 @@ ImageResultWidget::queue_image_tile(
     QImage *inTile)
 {
     this->_image_queue.emplace_back(inX, inY, std::move(inTile));
+    this->repaint();
 }
 
 void
