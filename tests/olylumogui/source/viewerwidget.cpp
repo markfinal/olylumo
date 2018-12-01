@@ -111,7 +111,7 @@ ViewerWidget::do_ray_cast()
         this->_frame_size->itemData(this->_current_frame_size_index).toSize(),
         this->_sample_count->value(),
         this->_max_rays_cast->itemData(this->_current_max_rays_cast_index).toUInt(),
-        this->_tile_count->value(),
+        1 << this->_tile_count->value(),
         this->_current_render_mode
     );
     connect(
@@ -197,8 +197,8 @@ ViewerWidget::setup_ui()
     );
 
     this->_tile_count = new QSpinBox;
-    this->_tile_count->setMinimum(1);
-    this->_tile_count->setMaximum(16);
+    this->_tile_count->setMinimum(0);
+    this->_tile_count->setMaximum(10);
     this->_tile_count->setSingleStep(1);
     connect(
         this->_tile_count,
@@ -221,7 +221,7 @@ ViewerWidget::setup_ui()
     toolbar->addWidget(new QLabel("Max rays cast:"));
     toolbar->addWidget(this->_max_rays_cast);
     toolbar->addSeparator();
-    toolbar->addWidget(new QLabel("Tile count:"));
+    toolbar->addWidget(new QLabel("Tile count (log2):"));
     toolbar->addWidget(this->_tile_count);
 
     this->_image_widget = new ImageResultWidget;
