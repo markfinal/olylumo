@@ -90,7 +90,7 @@ ViewerWidget::on_new_tile(
     const uint32_t inY,
     QImage *inTile)
 {
-    this->_image_widget->queue_image_tile(inX, inY, std::move(inTile));
+    this->_image_widget->queue_image_tile(inX, inY, inTile);
 }
 
 void

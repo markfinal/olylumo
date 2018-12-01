@@ -32,8 +32,9 @@ ImageResultWidget::queue_image_tile(
     const uint32_t inY,
     QImage *inTile)
 {
-    this->_image_queue.emplace_back(QRect(inX, inY, inTile->width(), inTile->height()), std::move(inTile));
-    this->repaint();
+    QRect region(inX, inY, inTile->width(), inTile->height());
+    this->_image_queue.emplace_back(region, inTile);
+    this->repaint(region);
 }
 
 void
