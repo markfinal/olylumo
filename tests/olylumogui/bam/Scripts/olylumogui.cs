@@ -136,6 +136,15 @@ namespace olylumogui
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
+                var collatedQtFrameworks = this.Find<QtCommon.CommonFramework>();
+                collatedQtFrameworks.ToList().ForEach(collatedFramework =>
+                    // must be a public patch in order for the stripping mode to inherit the settings
+                    (collatedFramework as Publisher.CollatedObject).PublicPatch((settings, appliedTo) =>
+                    {
+                        var rsyncSettings = settings as Publisher.IRsyncSettings;
+                        rsyncSettings.Exclusions = (collatedFramework.SourceModule as QtCommon.CommonFramework).PublishingExclusions;
+                    }));
+
                 this.IncludeFiles(
                     this.CreateTokenizedString("$(packagedir)/resources/osx/qt.conf"),
                     this.Macros["macOSAppBundleResourcesDir"],
