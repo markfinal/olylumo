@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageDefinition xsi:schemaLocation="http://www.buildamation.com ./Schema/BamPackageDefinitionV1.xsd" name="olylumoray" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildamation.com">
   <Description>Ray tracing</Description>
+  <PackageRepositories>
+    <Repo dir="../../../../bam-parallelism/packages" />
+  </PackageRepositories>
   <Dependents>
     <Package name="C" />
     <Package name="Clang" version="Xcode9" />
     <Package name="MakeFileBuilder" />
     <Package name="NativeBuilder" />
     <Package name="VisualC" version="15.0" />
+    <Package name="tbb" version="2019_U2" />
     <Package name="VSSolutionBuilder" />
     <Package name="XcodeBuilder" />
   </Dependents>

@@ -9,7 +9,7 @@
 #include "olylumoray/utils.h"
 #include "olylumoray/scene.h"
 
-//#define USE_TBB
+#define USE_TBB
 
 #ifdef USE_TBB
 #include "tbb/parallel_for.h"

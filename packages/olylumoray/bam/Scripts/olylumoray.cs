@@ -17,7 +17,6 @@ namespace olylumoray
                 if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
                 {
                     cxxCompiler.ExceptionHandler = C.Cxx.EExceptionHandler.Asynchronous;
-                    cxxCompiler.EnableRunTimeTypeInfo = false;
                     cxxCompiler.LanguageStandard = C.Cxx.ELanguageStandard.Cxx11;
                     cxxCompiler.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
                 }
@@ -54,6 +53,8 @@ namespace olylumoray
                 var cxxLinker = settings as C.ICxxOnlyLinkerSettings;
                 cxxLinker.StandardLibrary = C.Cxx.EStandardLibrary.libcxx;
             });
+
+            this.CompileAndLinkAgainst<tbb.ThreadBuildingBlocks>(source);
         }
     }
 }
