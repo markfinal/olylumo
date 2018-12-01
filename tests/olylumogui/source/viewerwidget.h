@@ -5,7 +5,6 @@
 #include "QtCore/QFutureWatcher"
 
 class QMdiArea;
-class QLabel;
 class QComboBox;
 class QSpinBox;
 class QImage;
@@ -27,6 +26,7 @@ enum class EViewerType
 };
 
 class RayCastWorker;
+class ImageResultWidget;
 
 class ViewerWidget final :
     public QWidget
@@ -78,7 +78,7 @@ private:
 private:
     EViewerType             _type;
     olylumoray::Scene      *_scene;
-    QLabel                 *_image_label;
+    ImageResultWidget      *_image_widget;
     QComboBox              *_frame_size;
     QComboBox              *_render_mode;
     QSpinBox               *_sample_count;

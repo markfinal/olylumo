@@ -1,5 +1,6 @@
 #include "viewerwidget.h"
 #include "raycastworker.h"
+#include "imageresultwidget.h"
 
 #include "olylumoray/raycast.h"
 
@@ -46,6 +47,8 @@ ViewerWidget::on_frame_size_changed(
     int inNewIndex)
 {
     this->_current_frame_size_index = inNewIndex;
+    const auto new_size = this->_frame_size->itemData(inNewIndex).toSize();
+    this->_image_widget->update_frame_size(new_size);
     this->do_ray_cast();
 }
 
@@ -77,8 +80,7 @@ void
 ViewerWidget::on_new_image(
     QImage *inImage)
 {
-    this->_image_label->setPixmap(QPixmap::fromImage(*inImage));
-    delete inImage;
+    this->_image_widget->update_image(inImage);
     this->_progress->setVisible(false);
     this->_progress->setValue(0);
 }
@@ -189,16 +191,19 @@ ViewerWidget::setup_ui()
     toolbar->addWidget(new QLabel("Max rays cast:"));
     toolbar->addWidget(this->_max_rays_cast);
 
-    this->_image_label = new QLabel;
-    layout->addWidget(this->_image_label);
+    this->_image_widget = new ImageResultWidget;
+    layout->addWidget(this->_image_widget);
 
+    // push the progress bar to the bottom
     layout->addStretch();
-
     this->_progress = new QProgressBar;
 
     auto status_bar = new QStatusBar;
     status_bar->addWidget(this->_progress);
     layout->addWidget(status_bar);
+
+    // force the current image to view
+    this->on_frame_size_changed(this->_frame_size->currentIndex());
 }
 
 } // namespace olylumogui
