@@ -77,6 +77,14 @@ ViewerWidget::on_max_rays_cast_changed(
 }
 
 void
+ViewerWidget::on_tile_count_changed(
+    int inNewValue)
+{
+    (void)inNewValue;
+    this->do_ray_cast();
+}
+
+void
 ViewerWidget::on_new_image(
     QImage *inImage)
 {
@@ -103,6 +111,7 @@ ViewerWidget::do_ray_cast()
         this->_frame_size->itemData(this->_current_frame_size_index).toSize(),
         this->_sample_count->value(),
         this->_max_rays_cast->itemData(this->_current_max_rays_cast_index).toUInt(),
+        this->_tile_count->value(),
         this->_current_render_mode
     );
     connect(
@@ -177,6 +186,17 @@ ViewerWidget::setup_ui()
         &ViewerWidget::on_max_rays_cast_changed
     );
 
+    this->_tile_count = new QSpinBox;
+    this->_tile_count->setMinimum(1);
+    this->_tile_count->setMaximum(16);
+    this->_tile_count->setSingleStep(1);
+    connect(
+        this->_tile_count,
+        static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+        this,
+        &ViewerWidget::on_tile_count_changed
+    );
+
     auto toolbar = new QToolBar;
     layout->addWidget(toolbar);
     toolbar->addWidget(new QLabel("Frame size:"));
@@ -190,6 +210,9 @@ ViewerWidget::setup_ui()
     toolbar->addSeparator();
     toolbar->addWidget(new QLabel("Max rays cast:"));
     toolbar->addWidget(this->_max_rays_cast);
+    toolbar->addSeparator();
+    toolbar->addWidget(new QLabel("Tile count:"));
+    toolbar->addWidget(this->_tile_count);
 
     this->_image_widget = new ImageResultWidget;
     layout->addWidget(this->_image_widget);

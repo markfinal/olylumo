@@ -26,6 +26,7 @@ raycast(
     const uint32_t inHeight,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
+    const uint32_t inTileCount,
     const EMode inMode,
     const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback,

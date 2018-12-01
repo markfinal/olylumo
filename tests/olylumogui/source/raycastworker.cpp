@@ -14,6 +14,7 @@ RayCastWorker::RayCastWorker(
     const QSize inSize,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
+    const uint32_t inTileCount,
     const olylumoray::EMode inRenderMode
 )
     :
@@ -21,6 +22,7 @@ RayCastWorker::RayCastWorker(
     _size(inSize),
     _sample_count(inSampleCount),
     _max_rays_cast(inMaxRaysCast),
+    _tile_count(inTileCount),
     _render_mode(inRenderMode)
 {
     this->_progress_tick = this->progress_tick();
@@ -50,6 +52,7 @@ RayCastWorker::run()
         this->_size.height(),
         this->_sample_count,
         this->_max_rays_cast,
+        this->_tile_count,
         this->_render_mode,
         this->_progress_tick,
         [this](const int inProgress)

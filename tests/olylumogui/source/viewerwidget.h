@@ -57,12 +57,15 @@ protected:
 
     void
     on_sample_count_changed(
-        int inNewValue
-    );
+        int inNewValue);
 
     void
     on_max_rays_cast_changed(
         int inNewIndex);
+
+    void
+    on_tile_count_changed(
+        int inNewValue);
 
     void
     on_new_image(
@@ -83,6 +86,7 @@ private:
     QComboBox              *_render_mode;
     QSpinBox               *_sample_count;
     QComboBox              *_max_rays_cast;
+    QSpinBox               *_tile_count;
     QProgressBar           *_progress;
     int                     _current_frame_size_index = 0;
     olylumoray::EMode       _current_render_mode;

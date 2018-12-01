@@ -60,6 +60,7 @@ raycast(
     const uint32_t inHeight,
     const uint32_t inSampleCount,
     const uint32_t inMaxRaysCast,
+    const uint32_t inTileCount,
     const EMode inMode,
     const uint32_t inProgressTick,
     std::function<void(int)> inProgressCallback,
@@ -85,45 +86,57 @@ raycast(
     auto progress = 0u;
     auto last_progress_tick = 0u;
     inProgressCallback(progress);
-    for (auto row = 0u; row < inHeight; ++row)
+
+    const auto tile_width = inWidth / inTileCount;
+    const auto tile_height = inHeight / inTileCount;
+    for (auto row = 0u; row < inTileCount; ++row)
     {
-        for (auto col = 0u; col < inWidth; ++col)
+        auto y = row * tile_height;
+        for (auto tile_y = 0u; tile_y < tile_height; ++tile_y, ++y)
         {
-            if (nullptr != inAbortState && *inAbortState)
+            for (auto col = 0u; col < inTileCount; ++col)
             {
-                return nullptr;
+                auto x = col * tile_width;
+                for (auto tile_x = 0u; tile_x < tile_width; ++tile_x, ++x)
+                {
+                    if (nullptr != inAbortState && *inAbortState)
+                    {
+                        return nullptr;
+                    }
+
+                    RGBA colour;
+                    for (auto sample = 0u; sample < inSampleCount; ++sample)
+                    {
+                        const auto u = static_cast<float>(x + random_between_zero_and_one()) / inWidth;
+                        // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
+                        const auto v = static_cast<float>(inHeight - y + random_between_zero_and_one()) / inHeight;
+
+                        Ray ray(
+                            camera_origin,
+                            (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
+                        );
+                        const auto minT = 0.0001f;
+                        //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
+                        colour += calculate_colour(inScene, ray, minT, inMaxRaysCast, inMode);
+                        ++progress;
+                    }
+
+                    *current_pixel = colour / static_cast<float>(inSampleCount);
+                    *current_pixel = current_pixel->gamma_correct();
+                    current_pixel->make_opaque();
+                    current_pixel++;
+                }
             }
-            RGBA colour;
-            for (auto sample = 0u; sample < inSampleCount; ++sample)
+
+            // calling progress updates is very expensive, so only do it
+            // when we've exceeded one % of total
+            // it's likely only to happen outside of the inner loops
+            const auto tick = progress / inProgressTick;
+            if (tick > last_progress_tick)
             {
-                const auto u = static_cast<float>(col + random_between_zero_and_one()) / inWidth;
-                // NDC is (-1,-1) in bottom left, but pixels have (0,0) in top-left
-                const auto v = static_cast<float>(inHeight - row + random_between_zero_and_one()) / inHeight;
-
-                Ray ray(
-                    camera_origin,
-                    (camera_image_plane_bottom_left + camera_image_plane_horizonal * u + camera_image_plane_vertical * v).normalise()
-                );
-                const auto minT = 0.0001f;
-                //const auto minT = camera_image_plane_bottom_left.z(); // for camera near plane for clipping
-                colour += calculate_colour(inScene, ray, minT, inMaxRaysCast, inMode);
-                ++progress;
+                inProgressCallback(tick);
+                last_progress_tick = tick;
             }
-
-            *current_pixel = colour / static_cast<float>(inSampleCount);
-            *current_pixel = current_pixel->gamma_correct();
-            current_pixel->make_opaque();
-            current_pixel++;
-        }
-
-        // calling progress updates is very expensive, so only do it
-        // when we've exceeded one % of total
-        // it's likely only to happen outside of the inner loops
-        const auto tick = progress / inProgressTick;
-        if (tick > last_progress_tick)
-        {
-            inProgressCallback(tick);
-            last_progress_tick = tick;
         }
     }
 

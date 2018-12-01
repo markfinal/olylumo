@@ -28,6 +28,7 @@ public:
         const QSize inSize,
         const uint32_t inSampleCount,
         const uint32_t inMaxRaysCast,
+        const uint32_t inTileCount,
         const olylumoray::EMode inRenderMode
     );
 
@@ -51,8 +52,9 @@ private:
     QSize              _size;
     uint32_t           _sample_count;
     uint32_t           _max_rays_cast;
-    uint32_t           _progress_tick;
+    uint32_t           _tile_count;
     olylumoray::EMode  _render_mode;
+    uint32_t           _progress_tick;
     bool               _abort = false;
 };
 
