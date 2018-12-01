@@ -131,16 +131,16 @@ raycast(
                     current_pixel->make_opaque();
                     current_pixel++;
                 }
-            }
 
-            // calling progress updates is very expensive, so only do it
-            // when we've exceeded one % of total
-            // it's likely only to happen outside of the inner loops
-            const auto tick = progress / inProgressTick;
-            if (tick > last_progress_tick)
-            {
-                inProgressCallback(tick);
-                last_progress_tick = tick;
+                // calling progress updates is very expensive, so only do it
+                // when we've exceeded one % of total
+                // it's likely only to happen outside of the inner loops
+                const auto tick = progress / inProgressTick;
+                if (tick > last_progress_tick)
+                {
+                    inProgressCallback(tick);
+                    last_progress_tick = tick;
+                }
             }
 
             inTileCompleteCallback(
