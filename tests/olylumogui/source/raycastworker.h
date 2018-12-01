@@ -5,6 +5,7 @@
 #include "QtCore/QSize"
 
 #include <cstdint>
+#include <memory>
 
 namespace olylumoray
 {
