@@ -8,20 +8,19 @@ namespace olylumogui
         C.Cxx.GUIApplication
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
-            var headers = this.CreateHeaderContainer("$(packagedir)/source/*.h");
-            var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.cpp");
+            var headers = this.CreateHeaderCollection("$(packagedir)/source/*.h");
+            var source = this.CreateCxxSourceCollection("$(packagedir)/source/*.cpp");
 
             foreach (var header in headers.Children)
             {
                 source.MocHeader(header);
             }
 
-            var qrcFiles = this.CreateQrcContainer("$(packagedir)/resources/*.qrc");
+            var qrcFiles = this.CreateQrcCollection("$(packagedir)/resources/*.qrc");
             foreach (var qrc in qrcFiles.Children)
             {
                 source.Rcc(qrc);
@@ -123,10 +122,9 @@ namespace olylumogui
         Publisher.Collation
     {
         protected override void
-        Init(
-            Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.SetDefaultMacrosAndMappings(EPublishingType.WindowedApplication);
 

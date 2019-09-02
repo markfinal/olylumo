@@ -3,12 +3,13 @@
   <Description>Command line interface</Description>
   <Dependents>
     <Package name="C" />
-    <Package name="Clang" version="Xcode9" />
+    <Package name="Clang" version="Xcode9" default="true" />
+    <Package name="Gcc" version="4.8" default="true" />
     <Package name="MakeFileBuilder" />
     <Package name="NativeBuilder" />
     <Package name="olylumopath" />
     <Package name="olylumoray" />
-    <Package name="VisualC" version="15.0" />
+    <Package name="VisualC" version="15.0" default="true" />
     <Package name="VSSolutionBuilder" />
     <Package name="XcodeBuilder" />
   </Dependents>

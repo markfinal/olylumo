@@ -4,14 +4,13 @@ namespace olylumoray
         C.Cxx.DynamicLibrary
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
-            this.CreateHeaderContainer("$(packagedir)/include/olylumoray/*.h");
+            this.CreateHeaderCollection("$(packagedir)/include/olylumoray/*.h");
 
-            var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.cpp");
+            var source = this.CreateCxxSourceCollection("$(packagedir)/source/*.cpp");
             source.PrivatePatch(settings =>
             {
                 if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
