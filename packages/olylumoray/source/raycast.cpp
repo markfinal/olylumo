@@ -9,8 +9,7 @@
 #include "olylumoray/utils.h"
 #include "olylumoray/scene.h"
 
-#define USE_TBB
-
+// determine this from the build system
 #ifdef USE_TBB
 #include "tbb/parallel_for.h"
 #include "tbb/blocked_range2d.h"

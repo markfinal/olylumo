@@ -13,6 +13,10 @@ namespace olylumoray
             var source = this.CreateCxxSourceCollection("$(packagedir)/source/*.cpp");
             source.PrivatePatch(settings =>
             {
+                if (settings is C.ICommonPreprocessorSettings preprocessor)
+                {
+                    preprocessor.PreprocessorDefines.Add("USE_TBB");
+                }
                 if (settings is C.ICxxOnlyCompilerSettings cxxCompiler)
                 {
                     cxxCompiler.ExceptionHandler = C.Cxx.EExceptionHandler.Asynchronous;
